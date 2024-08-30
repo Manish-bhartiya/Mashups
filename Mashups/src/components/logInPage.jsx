@@ -18,7 +18,7 @@ const SigninPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4001/user/login', formData);
+      const response = await axios.post('https://mashups-nine.vercel.app/user/login', formData);
       if (response.data) {
         toast.success("User logged in successfully");
         localStorage.setItem("Users", JSON.stringify(response.data.user));

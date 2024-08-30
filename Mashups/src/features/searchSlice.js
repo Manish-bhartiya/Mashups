@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export const fetchResults = createAsyncThunk('search/fetchSearchResults', async(term)=>{
         try {
-            const response = await axios.get(`http://localhost:4001/search/search?term=${term}`);
+            const response = await axios.get(`https://mashups-nine.vercel.app/search/search?term=${term}`);
             return response.data;
         } catch (error) {
             throw new error('Failed to fetch search results');

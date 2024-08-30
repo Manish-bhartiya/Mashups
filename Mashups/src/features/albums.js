@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const fetchAlbum = createAsyncThunk('allAlbums/fetchAlbum', async() =>{
     try {
-        const response = await axios.get('http://localhost:4001/album/all');
+        const response = await axios.get('https://mashups-nine.vercel.app/album/all');
         if(Array.isArray(response.data.albums)){
             return response.data.albums;
         }else{

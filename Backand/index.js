@@ -18,9 +18,9 @@ const app = express();
 
 // Middleware setup
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors());  // Allow all origins (can be customized as needed)
 
-//mongodb data base connention 
+// MongoDB database connection
 db();
 
 // Routes
@@ -28,20 +28,19 @@ app.get('/', (req, res) => {
   res.status(200).json({ message: "Hello There" });
 });
 
-app.use("/mashup",playlistrouter);
-app.use("/api",songrouter);
-app.use("/album",albumtrouter);
-app.use("/user",userRoute);
-app.use("/search",searchRoute);
+app.use("/mashup", playlistrouter);
+app.use("/api", songrouter);
+app.use("/album", albumtrouter);
+app.use("/user", userRoute);
+app.use("/search", searchRoute);
 
-app.use('/uploadAudio', cloudinaryRouter); // Prefix routes with `/api`
+app.use('/uploadAudio', cloudinaryRouter); // Prefix routes with `/uploadAudio`
 
-// Create a port
+// Environment-defined port (handled automatically by Vercel)
 const PORT = process.env.PORT || 3000;
 
-// Make app listen on port
+// Make the app listen on the specified port
 app.listen(PORT, function () {
   console.log(`Server Up and Running on http://localhost:${PORT}`);
 });
-
 

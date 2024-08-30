@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export const fetchPlaylist = createAsyncThunk('playlists/fetchPlaylist', async () => {
   try {
-    const response = await axios.get('http://localhost:4001/mashup/all');
+    const response = await axios.get('https://mashups-nine.vercel.app/mashup/all');
     // console.log(response)
     if (Array.isArray(response.data.playlists)) {
       // console.log(response.data.playlists[1].songs);    
