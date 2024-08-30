@@ -18,8 +18,14 @@ const app = express();
 
 // Middleware setup
 app.use(bodyParser.json());
-app.use(cors({ origin: 'https://mashups-dbea.vercel.app/signin' }));
-  // Allow all origins (can be customized as needed)
+
+// Configure CORS to allow requests from your frontend
+const corsOptions = {
+  origin: 'https://mashups-dbea.vercel.app/signin', // Replace this with your frontend domain
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+  credentials: true, // Allow cookies to be sent with the requests
+};
+app.use(cors(corsOptions));
 
 // MongoDB database connection
 db();
@@ -34,8 +40,7 @@ app.use("/api", songrouter);
 app.use("/album", albumtrouter);
 app.use("/user", userRoute);
 app.use("/search", searchRoute);
-
-app.use('/uploadAudio', cloudinaryRouter); // Prefix routes with `/uploadAudio`
+app.use('/uploadAudio', cloudinaryRouter);
 
 // Environment-defined port (handled automatically by Vercel)
 const PORT = process.env.PORT || 3000;
@@ -44,4 +49,3 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, function () {
   console.log(`Server Up and Running on http://localhost:${PORT}`);
 });
-
