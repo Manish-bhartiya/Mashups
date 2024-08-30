@@ -18,7 +18,8 @@ const app = express();
 
 // Middleware setup
 app.use(bodyParser.json());
-app.use(cors());  // Allow all origins (can be customized as needed)
+app.use(cors({ origin: 'https://mashups-dbea.vercel.app/signin' }));
+  // Allow all origins (can be customized as needed)
 
 // MongoDB database connection
 db();
