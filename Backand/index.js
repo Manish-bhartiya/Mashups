@@ -21,11 +21,17 @@ app.use(bodyParser.json());
 
 // Configure CORS to allow requests from your frontend
 const corsOptions = {
-  origin: 'https://mashups-dbea.vercel.app/signin', // Replace this with your frontend domain
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
-  credentials: true, // Allow cookies to be sent with the requests
+  origin: 'https://mashups-dbea.vercel.app', // Your frontend domain
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Ensure OPTIONS is included
+  allowedHeaders: ['Content-Type', 'Authorization'], // Headers you expect to be used
+  credentials: true, // Allow credentials to be sent with the requests
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
 };
 app.use(cors(corsOptions));
+
+// Handle OPTIONS requests
+app.options('*', cors(corsOptions));
 
 // MongoDB database connection
 db();
