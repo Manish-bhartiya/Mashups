@@ -10,29 +10,19 @@ const albumtrouter = require('./routes/albumsRoute');
 const userRoute = require('./routes/userRoute');
 const searchRoute = require('./routes/serch');
 
-// Initialize dotenv to read environment variables
 dotenv.config();
 
-// Create an instance of express
 const app = express();
 
-// Middleware setup
+// Configure CORS to allow requests from your frontend domain
+const corsOptions = {
+  origin: 'https://mashups-dbea.vercel.app/', // Replace with your frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+};
+
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
-
-// Configure CORS to allow requests from your frontend
-const io = new Server(server, {
-  cors: {
-    origin: "*",
-    credentials:true,
-    methods: ["GET", "POST"]
-  }
-});
-
-// Handle OPTIONS requests
-app.options('*', cors(corsOptions));
-
-// MongoDB database connection
-db();
 
 // Routes
 app.get('/', (req, res) => {
@@ -46,10 +36,8 @@ app.use("/user", userRoute);
 app.use("/search", searchRoute);
 app.use('/uploadAudio', cloudinaryRouter);
 
-// Environment-defined port (handled automatically by Vercel)
 const PORT = process.env.PORT || 3000;
 
-// Make the app listen on the specified port
 app.listen(PORT, function () {
   console.log(`Server Up and Running on http://localhost:${PORT}`);
 });
