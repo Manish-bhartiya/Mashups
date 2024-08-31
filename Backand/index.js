@@ -15,26 +15,28 @@ dotenv.config();
 const app = express();
 
 // Configure CORS to allow requests from your frontend domain
-const corsOptions = {
-  origin: 'https://mashups-dbea.vercel.app/', // Replace with your frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
-};
-
-app.use(cors(corsOptions));
-app.use(bodyParser.json());
+// const corsOptions = {
+  //   origin: 'https://mashups-dbea.vercel.app/', // Replace with your frontend URL
+  //   methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  //   credentials: true
+  // };
+  
+  
+  app.use(bodyParser.json());
+  app.use(cors());
+  db();
 
 // Routes
 app.get('/', (req, res) => {
   res.status(200).json({ message: "Hello There" });
 });
 
-app.use("/mashup", playlistrouter);
+app.use("/api", playlistrouter);
 app.use("/api", songrouter);
-app.use("/album", albumtrouter);
-app.use("/user", userRoute);
-app.use("/search", searchRoute);
-app.use('/uploadAudio', cloudinaryRouter);
+app.use("/api", albumtrouter);
+app.use("/api", userRoute);
+app.use("/api", searchRoute);
+app.use('/api', cloudinaryRouter);
 
 const PORT = process.env.PORT || 3000;
 

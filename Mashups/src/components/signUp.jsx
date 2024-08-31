@@ -27,7 +27,7 @@ const SignupPage = () => {
       return;
     }
     try {
-      const response = await axios.post('http://localhost:4001/user/signup', formData, {
+      const response = await axios.post('/api/signup', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
