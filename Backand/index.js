@@ -32,7 +32,7 @@ app.get('/', (req, res) => {
 });
 
 app.use("/api", playlistrouter);
-app.use("/api", songrouter);
+app.use("/api1", songrouter);
 app.use("/api", albumtrouter);
 app.use("/api", userRoute);
 app.use("/api", searchRoute);
