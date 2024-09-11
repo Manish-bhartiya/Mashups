@@ -23,7 +23,7 @@ const PlaylistSongs = ({ playlistName }) => {
     const fetchPlaylistAndSongs = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4001/mashup/${playlistName}`
+          `/api/${playlistName}`
         );
         const { playlist: playlistData, songs: songsData } = response.data;
 
