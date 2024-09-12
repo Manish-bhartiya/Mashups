@@ -15,20 +15,23 @@ dotenv.config();
 const app = express();
 
 // Configure CORS to allow requests from your frontend domain
-// const corsOptions = {
-  //   origin: 'https://mashups-dbea.vercel.app/', // Replace with your frontend URL
-  //   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  //   credentials: true
-  // };
-  
-  
-  app.use(bodyParser.json());
-  app.use(cors());
-  db();
+const corsOptions = new Server(server, {
+  cors: {
+    origin: "*",
+    credentials:true,
+    methods: ["GET", "POST"]
+  }
+});
+
+app.use(bodyParser.json());
+app.use(cors(corsOptions)); // Apply CORS with specified options
+
+// Initialize database connection
+db();
 
 // Routes
 app.get('/', (req, res) => {
-  res.status(200).json({ message: "Hello There" });
+    res.status(200).json({ message: "Hello There" });
 });
 
 app.use("/api", playlistrouter);
@@ -38,8 +41,9 @@ app.use("/api", userRoute);
 app.use("/api", searchRoute);
 app.use('/api', cloudinaryRouter);
 
+// Start the server
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, function () {
-  console.log(`Server Up and Running on http://localhost:${PORT}`);
+    console.log(`Server Up and Running on http://localhost:${PORT}`);
 });
