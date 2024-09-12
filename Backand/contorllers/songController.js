@@ -2,9 +2,6 @@ const Songs = require('../models/songs');
 const cloudinaryUploader = require('../utils/imageUploder');
 
 const createSong = async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://mashups-dbea.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   try {
     const { name, image, artist } = req.body;
     const file = req.file;
@@ -40,9 +37,6 @@ const createSong = async (req, res) => {
 };
 
 const getAllSongs = async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://mashups-dbea.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   try {
     const songs = await Songs.find();
     res.status(200).json({ songs, message: "Fetched all songs successfully" });
@@ -53,9 +47,6 @@ const getAllSongs = async (req, res) => {
 };
 
 const getSongById = async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://mashups-dbea.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   try {
     const { id } = req.params;
     const song = await Songs.findById(id);

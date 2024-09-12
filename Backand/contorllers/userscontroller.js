@@ -12,9 +12,6 @@ const bcryptjs = require('bcryptjs');
 //     }
 // } 
 exports.Signup = async(req,res)=>{
-  res.setHeader('Access-Control-Allow-Origin', 'https://mashups-dbea.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     try{
         const {
             name,
@@ -44,9 +41,6 @@ exports.Signup = async(req,res)=>{
 }
 
 exports.Login = async(req,res) =>{
-  res.setHeader('Access-Control-Allow-Origin', 'https://mashups-dbea.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
         try {
             const {gmail,password} = req.body;
             const user = await users.findOne({gmail});
@@ -70,9 +64,6 @@ exports.Login = async(req,res) =>{
         }
 }
 module.exports.deleteUser =  async function deleteUser(req,res){
-  res.setHeader('Access-Control-Allow-Origin', 'https://mashups-dbea.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     let dataTobeDeleted = req.body;
     let user = await users.findOneAndDelete(dataTobeDeleted);
     res.json({
@@ -81,9 +72,6 @@ module.exports.deleteUser =  async function deleteUser(req,res){
 }
 
 exports.addSongInFavorites = async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://mashups-dbea.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     const { songId, userId } = req.body;
     try {
       const user = await users.findById(userId);
@@ -109,9 +97,6 @@ exports.addSongInFavorites = async (req, res) => {
   };
   
 exports.removeSongFromFavorites = async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://mashups-dbea.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     const { songId, userId } = req.query; // Changed to req.query
     try {
       const user = await users.findById(userId);
@@ -128,9 +113,6 @@ exports.removeSongFromFavorites = async (req, res) => {
   
 
 exports.getFavoriteSongs = async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://mashups-dbea.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     const { userId } = req.query;
   
     try {
