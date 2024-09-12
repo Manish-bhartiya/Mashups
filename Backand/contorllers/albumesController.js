@@ -3,6 +3,9 @@ const Songs = require("../models/songs");
 
 // Function to create a new playlist
 const createAlbum = async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'https://mashups-dbea.vercel.app');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   try {
     const { name, image, songs } = req.body;
 
@@ -26,6 +29,9 @@ const createAlbum = async (req, res) => {
 };
 
 const getAllAlbums = async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'https://mashups-dbea.vercel.app');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     try {
       const albums = await Albums.find().populate("songs");
       res

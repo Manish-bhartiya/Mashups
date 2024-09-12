@@ -3,6 +3,9 @@ const Songs = require("../models/songs");
 
 // Function to create a new playlist
 const createPlaylist = async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'https://mashups-dbea.vercel.app');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   try {
     const { name, image, songs } = req.body;
 
@@ -27,6 +30,9 @@ const createPlaylist = async (req, res) => {
 
 // Function to get all playlists
   const getAllPlaylists = async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', 'https://mashups-dbea.vercel.app');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     try {
       const playlists = await Playlist.find().populate("songs");
       res
@@ -42,6 +48,9 @@ const createPlaylist = async (req, res) => {
 
 // Function to add songs to an existing playlist by name
 const addSongsToPlaylist = async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'https://mashups-dbea.vercel.app');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   try {
     const { playlistName, songs } = req.body;
 
@@ -84,6 +93,9 @@ const addSongsToPlaylist = async (req, res) => {
 
 // Function to get playlist by name and populate songs
 const getPlaylistByName = async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'https://mashups-dbea.vercel.app');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   try {
     const { playlistName } = req.body;
 
@@ -105,6 +117,9 @@ const getPlaylistByName = async (req, res) => {
 };
 
 const getSongsByPlaylistName = async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'https://mashups-dbea.vercel.app');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   try {
     const { playlistName } = req.params;
 
