@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { apiconnecter } from '../services/apiconnecter';
 
 const SigninPage = () => {
   const [formData, setFormData] = useState({
@@ -18,7 +19,8 @@ const SigninPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/login', formData);
+      const response = await apiconnecter('post','/login', formData);
+      console.log(response);
       if (response.data) {
         toast.success("User logged in successfully");
         localStorage.setItem("Users", JSON.stringify(response.data.user));

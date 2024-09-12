@@ -1,9 +1,10 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { apiconnecter } from "../services/apiconnecter";
 
 export const fetchAlbum = createAsyncThunk('allAlbums/fetchAlbum', async() =>{
     try {
-        const response = await axios.get('/api/allAlbums');
+        const response = await apiconnecter('get','/allAlbums');
         if(Array.isArray(response.data.albums)){
             return response.data.albums;
         }else{

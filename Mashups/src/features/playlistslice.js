@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { apiconnecter } from '../services/apiconnecter';
 
 export const fetchPlaylist = createAsyncThunk('playlists/fetchPlaylist', async () => {
   try {
-    const response = await axios.get('/api/allPlaylist');
+    const response = await apiconnecter('get','/allPlaylist');
     // console.log(response)
     if (Array.isArray(response.data.playlists)) {
       // console.log(response.data.playlists[1].songs);    

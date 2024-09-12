@@ -1,9 +1,10 @@
 import { createAsyncThunk,createSlice } from "@reduxjs/toolkit";
 import axios from 'axios';
+import { apiconnecter } from "../services/apiconnecter";
 
 export const fetchResults = createAsyncThunk('search/fetchSearchResults', async(term)=>{
         try {
-            const response = await axios.get(`/api/search?term=${term}`);
+            const response = await apiconnecter('get',`search?term=${term}`);
             return response.data;
         } catch (error) {
             throw new error('Failed to fetch search results');

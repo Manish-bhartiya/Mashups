@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { apiconnecter } from '../services/apiconnecter';
 
 const SignupPage = () => {
   const [formData, setFormData] = useState({
@@ -27,7 +28,7 @@ const SignupPage = () => {
       return;
     }
     try {
-      const response = await axios.post('/api/signup', formData, {
+      const response = await apiconnecter('post','/signup', formData, {
         headers: {
           'Content-Type': 'application/json',
         },

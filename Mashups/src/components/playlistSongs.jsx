@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { setSongs, setCurrentSongIndex ,togglePlayPause} from "../features/audioSlice";
+import { apiconnecter } from "../services/apiconnecter";
 
 const PlaylistSongs = ({ playlistName }) => {
   
@@ -22,9 +23,7 @@ const PlaylistSongs = ({ playlistName }) => {
   useEffect(() => {
     const fetchPlaylistAndSongs = async () => {
       try {
-        const response = await axios.get(
-          `/api/${playlistName}`
-        );
+        const response = await apiconnecter('get',`/${playlistName}`);
         const { playlist: playlistData, songs: songsData } = response.data;
 
         setPlaylist(playlistData);
