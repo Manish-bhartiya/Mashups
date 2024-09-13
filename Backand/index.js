@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const cloudinaryRouter = require('./routes/cloudyneryRoute');
 const db = require('./connection/dbconnection');
@@ -13,12 +12,14 @@ dotenv.config();
 
 const app = express();
 
+// Use built-in middleware for JSON parsing
+app.use(express.json());
+
 // Custom middleware to set CORS headers
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  console.log("i am hit");
   next(); // Proceed to the next middleware or route handler
 });
 
@@ -27,12 +28,8 @@ app.options('*', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  console.log("i am hit");
   res.sendStatus(204); // Respond with no content for OPTIONS requests
 });
-
-// Use bodyParser.json() instead of express.json()
-app.use(bodyParser.json());
 
 // Initialize database connection
 db();
@@ -51,6 +48,6 @@ app.use('/api', cloudinaryRouter);
 
 // Start the server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, function () {
+app.listen(PORT, () => {
   console.log(`Server Up and Running on http://localhost:${PORT}`);
 });
