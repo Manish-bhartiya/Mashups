@@ -8,7 +8,7 @@ export default defineConfig({
     strictPort:true,
     headers:{
       a:'b',
-      'access-control-allow-origin':'*',
+      // 'access-control-allow-origin':'*',
     },
     proxy:{
       '/api':{
