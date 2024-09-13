@@ -7,7 +7,8 @@ export default defineConfig({
     port:'5173',
     strictPort:true,
     headers:{
-      a:'b'
+      a:'b',
+      'access-control-allow-origin':'*',
     },
     proxy:{
       '/api':{
