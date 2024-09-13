@@ -13,7 +13,8 @@ export default defineConfig({
     },
     proxy: {
       '/api': {
-        target: 'http://localhost:4001', // Replace * with actual backend URL
+        // target: 'http://localhost:4001', // Replace * with actual backend URL
+        target:'https://mashupsbackand.vercel.app/',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '') // Removes /api prefix
       }
