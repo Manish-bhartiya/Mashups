@@ -15,17 +15,17 @@ dotenv.config();
 const app = express();
 
 // Configure CORS to allow requests from your frontend domain
-const corsOptions =  {
+// const corsOptions =  {
   
-    origin: "https://mashups-dbea.vercel.app/",
-    credentials:true,
-    methods: ["GET", "POST"]
+//     origin: "https://mashups-dbea.vercel.app/",
+//     credentials:true,
+//     methods: ["GET", "POST"]
   
-};
+// };
 
 app.use(bodyParser.json());
-app.options("",cors(corsOptions));
-app.use(cors(corsOptions)); // Apply CORS with specified options
+// app.options("",cors(corsOptions));
+app.use(cors); // Apply CORS with specified options
 
 // Initialize database connection
 db();
