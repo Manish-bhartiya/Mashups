@@ -17,7 +17,7 @@ const app = express();
 // Configure CORS to allow requests from any origin
 
 app.use(cors({
-    origin:"*",
+    origin:"https://mashups-dbea.vercel.app/",
     credentials:true
 })); // Apply CORS
 app.use(bodyParser.json());
