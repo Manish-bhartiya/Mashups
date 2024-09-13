@@ -24,10 +24,7 @@ const app = express();
 // });
 
 app.use(bodyParser.json());
-app.use(cors({
-  origin:"*",
-  credentials:true,
-})); // Apply CORS with specified options
+app.use(cors); // Apply CORS with specified options
 
 // Initialize database connection
 db();
