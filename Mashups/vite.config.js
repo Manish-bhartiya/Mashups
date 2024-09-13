@@ -7,12 +7,11 @@ export default defineConfig({
     port:'5173',
     strictPort:true,
     headers:{
-      a:'b',
-      // 'access-control-allow-origin':'*',
+      a:'b'
     },
     proxy:{
       '/api':{
-        target:'http://localhost:4001',
+        target:'https://mashups-nine.vercel.app/',
         changeOrigin:true,
         rewrite:(path) => path.replace(/^\/api/,'')
       }
