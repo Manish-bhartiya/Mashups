@@ -14,17 +14,10 @@ dotenv.config();
 
 const app = express();
 
-// Configure CORS to allow requests from your frontend domain
-// const corsOptions = new Server(server, {
-//   cors: {
-//     origin: "*",
-//     credentials:true,
-//     methods: ["GET", "POST"]
-//   }
-// });
+// Configure CORS to allow requests from any origin
 
+app.use(cors()); // Apply CORS
 app.use(bodyParser.json());
-app.use(cors); // Apply CORS with specified options
 
 // Initialize database connection
 db();
