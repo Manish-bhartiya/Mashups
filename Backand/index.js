@@ -25,8 +25,8 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(cors({
-  origin:"https://mashupsbackand.vercel.app/",
   allowedHeaders:{
+    "origin":"https://mashupsbackand.vercel.app/",
      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type"
   },
