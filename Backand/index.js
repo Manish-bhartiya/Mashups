@@ -17,7 +17,7 @@ const app = express();
 // Configure CORS to allow requests from your frontend domain
 const corsOptions =  {
   
-    origin: "http://localhost:4001",
+    origin: "https://mashups-dbea.vercel.app/",
     credentials:true,
     methods: ["GET", "POST"]
   
