@@ -28,7 +28,7 @@ const SignupPage = () => {
       return;
     }
     try {
-      const response = await apiconnecter('post','signup', formData, {
+      const response = await apiconnecter('post','/signup', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
