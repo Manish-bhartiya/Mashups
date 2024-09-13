@@ -15,7 +15,7 @@ const app = express();
 
 // Custom middleware to set CORS headers
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://mashups-dbea.vercel.app');
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next(); // Proceed to the next middleware or route handler
@@ -23,7 +23,7 @@ app.use((req, res, next) => {
 
 // Handle preflight requests
 app.options('*', (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://mashups-dbea.vercel.app');
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.sendStatus(204); // Respond with no content for OPTIONS requests
