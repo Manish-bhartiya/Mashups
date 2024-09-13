@@ -25,11 +25,21 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(cors({
+<<<<<<< HEAD
   origin: 'https://mashups-dbea.vercel.app', // Set your frontend URL here
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true, // Allow cookies and authentication headers
   allowedHeaders: ['Content-Type', 'Authorization'] // Specify the allowed headers
 }));
+=======
+      credentials:true
+  allowedHeaders:{
+    "origin":"*",
+     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type"
+  },
+})); // Apply CORS with specified options
+>>>>>>> b39f4ffd03011fb62c494e1939281e95228c79c9
 
 // Initialize database connection
 db();
