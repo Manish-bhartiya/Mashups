@@ -16,7 +16,10 @@ const app = express();
 
 // Configure CORS to allow requests from any origin
 
-app.use(cors()); // Apply CORS
+app.use(cors({
+    origin:"*",
+    credentials:true
+})); // Apply CORS
 app.use(bodyParser.json());
 
 // Initialize database connection
