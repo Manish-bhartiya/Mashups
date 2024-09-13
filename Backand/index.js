@@ -25,7 +25,7 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(cors({
-  origin:"https://mashupsbackand.vercel.app/",
+  origin:"*",
   credentials:true
 })); // Apply CORS with specified options
 
