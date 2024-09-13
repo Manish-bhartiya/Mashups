@@ -8,11 +8,11 @@ export default defineConfig({
     strictPort:true,
     headers:{
       a:'b',
-      'access-control-allow-origin':'*',
+      // 'access-control-allow-origin':'*',
     },
     proxy:{
       '/api':{
-        target:'https://mashups-nine.vercel.app/',
+        target:'https://mashupsbackand.vercel.app/',
         changeOrigin:true,
         rewrite:(path) => path.replace(/^\/api/,'')
       }
