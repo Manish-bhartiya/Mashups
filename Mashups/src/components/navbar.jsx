@@ -5,14 +5,13 @@ import Logout from './logout';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAuthUser } from '../features/authSlice';
 import { fetchResults, togglePage } from '../features/searchSlice';
-import SearchResults from '../components/searchResulst';
 import SearchBar from './searchbar';
+
 const Navbar = () => {
   const authUser = useSelector(selectAuthUser);
   const [sticky, setSticky] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [term, setTerm] = useState("");
-  const [changePage,setChangePage] = useState(false);
 
   const dispatch = useDispatch();
   const searchStatus = useSelector((state) => state.search.status);
@@ -47,32 +46,32 @@ const Navbar = () => {
     } else {
         dispatch(togglePage(false));
     }
-};
+  };
+
   const navItems = (
     <>
-      <li>
+      <li className="p-2">
         <Link to="/">Home</Link>
       </li>
-      <li>
+      <li className="p-2">
         <Link to="/explore">Explore</Link>
       </li>
-      <li>
+      <li className="p-2">
         <Link to="/favorites">Favorites</Link>
       </li>
-      <li>
+      <li className="p-2">
         <Link to="/about">About Us</Link>
       </li>
     </>
   );
 
   return (
-    <div className={`navbar bg-black border-b-2 border-white text-white ${sticky ? 'sticky' : ''}`}>
+    <div className={`navbar bg-black border-b-2 border-white text-white ${sticky ? 'sticky top-0 z-50' : ''}`}>
       <nav className="container mx-auto p-4 flex items-center justify-between">
+        {/* Mobile Dropdown Button */}
         <div className="navbar-start flex items-center">
-          <div className="dropdown lg:hidden">
-            <div
-              tabIndex={0}
-              role="button"
+          <div className="lg:hidden">
+            <button
               className="btn btn-ghost"
               onClick={toggleDropdown}
             >
@@ -90,31 +89,37 @@ const Navbar = () => {
                   d="M4 6h16M4 12h8m-8 6h16"
                 />
               </svg>
-            </div>
-            {dropdownVisible && (
-              <ul
-                tabIndex={0}
-                className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
-              >
-                {navItems}
-              </ul>
-            )}
+            </button>
           </div>
-          <Link to="/" className="bold font-extrabold">
+
+          {/* Logo */}
+          <Link
+            to="/"
+            className="font-extrabold block"
+          >
             <img
               src="https://res.cloudinary.com/dhfjy459o/image/upload/v1722677369/logo_2-removebg-preview_nwfo5w.png"
               alt="Logo"
-              className="h-16"
+              className="h-12 lg:h-16"
             />
           </Link>
         </div>
-        <div className="    ">
-         <SearchBar/>
+
+        {/* Search Bar */}
+        <div className={`flex-grow ${dropdownVisible ? 'hidden' : 'block'} lg:block`}>
+          <SearchBar />
         </div>
-        <div className="navbar-end flex items-center">
-          <div className="navbar-center hidden lg:flex mr-3">
-            <ul className="menu flex felx-col gap-10">{navItems}</ul>
-          </div>
+
+        {/* Mobile Dropdown Menu */}
+        {dropdownVisible && (
+          <ul className="flex lg:hidden flex-col items-center absolute top-16 left-0 w-full bg-black text-white py-4 space-y-2">
+            {navItems}
+          </ul>
+        )}
+
+        {/* Desktop Menu */}
+        <div className="navbar-end hidden lg:flex items-center">
+          <ul className="menu flex gap-10">{navItems}</ul>
           {authUser ? (
             <Logout />
           ) : (
@@ -129,7 +134,6 @@ const Navbar = () => {
           )}
         </div>
       </nav>
-      {/* {term && searchStatus !== 'idle' && <SearchResults term={term} />} */}
     </div>
   );
 };

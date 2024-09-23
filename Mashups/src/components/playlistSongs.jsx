@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
-import { setSongs, setCurrentSongIndex ,togglePlayPause} from "../features/audioSlice";
+import { useNavigate } from "react-router-dom";
+import { setSongs, setCurrentSongIndex, togglePlayPause } from "../features/audioSlice";
 import { apiconnecter } from "../services/apiconnecter";
 
 const PlaylistSongs = ({ playlistName }) => {
-  
   const currentSongIndex = useSelector((state) => state.audio.currentSongIndex);
   const isPlaying = useSelector((state) => state.audio.isPlaying);
 
@@ -15,7 +13,7 @@ const PlaylistSongs = ({ playlistName }) => {
   const [playlistsongs, setPlaylistsongs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [songid,setSongid] = useState(null);
+  const [songid, setSongid] = useState(null);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -23,7 +21,7 @@ const PlaylistSongs = ({ playlistName }) => {
   useEffect(() => {
     const fetchPlaylistAndSongs = async () => {
       try {
-        const response = await apiconnecter('get',`/${playlistName}`);
+        const response = await apiconnecter("get", `/${playlistName}`);
         const { playlist: playlistData, songs: songsData } = response.data;
 
         setPlaylist(playlistData);
@@ -43,16 +41,11 @@ const PlaylistSongs = ({ playlistName }) => {
     }
   }, [playlistName, dispatch]);
 
-  const handleSongClick = (index,_id) => {
-    console.log(_id);
+  const handleSongClick = (index, _id) => {
     setSongid(_id);
-    setCurrentSongIndex(index);
-    console.log("the index from play",index);
     dispatch(setCurrentSongIndex(index));
     if (isPlaying) dispatch(togglePlayPause(true));
   };
-
- 
 
   if (loading) {
     return <div className="text-center mt-8 ">Loading...</div>;
@@ -63,8 +56,7 @@ const PlaylistSongs = ({ playlistName }) => {
   }
 
   return (
-    <div className="  min-h-screen  text-white">
-     
+    <div className="min-h-screen bg-black text-white px-4">
       <button
         onClick={() => navigate("/")}
         className="mb-4 text-white py-2 px-4 rounded"
@@ -72,30 +64,37 @@ const PlaylistSongs = ({ playlistName }) => {
         <IoMdArrowRoundBack />
       </button>
 
-      <div className="w-[750px] absolute top- left-[230px]">
+      <div className="max-w-5xl mx-auto">
+        {/* Playlist Info */}
         <div className="text-center mb-8">
           <img
             src={playlist.image}
             alt={playlist.name}
-            className="size-80 mx-auto shadow-lg mb-4"
+            className="w-40 h-40 md:w-60 md:h-60 lg:w-80 lg:h-80 mx-auto shadow-lg mb-4 object-cover rounded-full"
           />
-          <h2 className="text-3xl font-bold ">{playlist.name}</h2>
+          <h2 className="text-2xl md:text-3xl font-bold">{playlist.name}</h2>
         </div>
-        <ul className="bg-black overflow-y-scroll border">
+
+        {/* Playlist Songs */}
+        <ul className="bg-black overflow-y-scroll border border-gray-700 max-h-[70vh] rounded-lg">
           {playlistsongs.map((song, index) => (
             <li
               key={song._id}
-              className="bg-black flex shadow-md rounded-lg p-4 hover:bg-gray-700 transition duration-300 cursor-pointer"
-              onClick={() => handleSongClick(index,song._id)}
+              className={`flex items-center justify-between p-4 hover:bg-gray-700 transition duration-300 cursor-pointer ${
+                songid === song._id ? "bg-gray-800" : "bg-black"
+              }`}
+              onClick={() => handleSongClick(index, song._id)}
             >
               <p
-                className={`flex-1 text-lg font-semibold mb-2 ${
-                  songid == song._id ? " text-gray-500" : " text-white"
+                className={`flex-1 text-sm md:text-lg font-semibold mb-2 ${
+                  songid === song._id ? "text-gray-500" : "text-white"
                 }`}
               >
                 {index + 1}. {song.name}
               </p>
-              <p className="flex-1 text-right text-white">{song.artist}</p>
+              <p className="flex-1 text-right text-sm md:text-lg text-white">
+                {song.artist}
+              </p>
             </li>
           ))}
         </ul>
