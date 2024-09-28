@@ -27,7 +27,7 @@ const SigninPage = () => {
       if (response.data) {
         toast.success("User logged in successfully");
         localStorage.setItem("Users", JSON.stringify(response.data.user));
-        window.location.reload();
+        // window.location.reload();
         setShowLogin(false);
       }
     } catch (err) {
