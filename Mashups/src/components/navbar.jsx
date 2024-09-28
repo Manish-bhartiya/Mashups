@@ -121,9 +121,12 @@ const Navbar = () => {
         {/* Desktop Menu */}
         <div className="navbar-end hidden lg:flex items-center gap-4">
           <ul className="menu flex gap-10">{navItems}</ul>
+        </div>
+
+        {/* User Profile */}
+        <div className="p-2 lg:p-0">
           {authUser ? (
-            // <Logout />
-            <Userprofile/>
+            <Userprofile />  
           ) : (
             <div className="p-2">
               <Link
