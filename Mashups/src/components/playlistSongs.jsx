@@ -30,14 +30,14 @@ const PlaylistSongs = ({ playlistName }) => {
           toast.error("User not found. Please log in again.");
           return;
         }
-
-        // const response = await axios.get(
-        //   `http://localhost:4001/api/getFavorites?userId=${user._id}`
-        // );
-
-        const response = apiconnecter('get',`users/getFavorites?userId=${user._id}`);
-
-        setFavoriteSongs(response.data.favoriteSongs);
+    
+        const response = await apiconnecter('get', `users/getFavorites?userId=${user._id}`);
+    
+        if (response && response.data && response.data.favoriteSongs) {
+          setFavoriteSongs(response.data.favoriteSongs);
+        } else {
+          throw new Error('Invalid response format');
+        }
       } catch (err) {
         setError("Failed to fetch favorite songs.");
         console.error(err);
@@ -45,7 +45,7 @@ const PlaylistSongs = ({ playlistName }) => {
         setLoading(false);
       }
     };
-
+    
     fetchFavoriteSongs();
   }, [dispatch]);
 
