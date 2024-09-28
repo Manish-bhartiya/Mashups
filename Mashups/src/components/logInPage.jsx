@@ -19,7 +19,10 @@ const SigninPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await apiconnecter('post','login', formData);
+      const response = await apiconnecter('post','users/login', formData);
+
+      // const response = await axios.post("http://localhost:4001/api/login",formData);
+      
       console.log(response);
       if (response.data) {
         toast.success("User logged in successfully");

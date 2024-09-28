@@ -4,7 +4,10 @@ import { apiconnecter } from "../services/apiconnecter";
 
 export const fetchResults = createAsyncThunk('search/fetchSearchResults', async (term) => {
     try {
-        const response = await apiconnecter('get', `/search?term=${term}`);
+        console.log(term);
+        // const response = await axios.get(`http://localhost:4001/api/searchsongs?term=${term}`);
+        const response = await apiconnecter('get',`search/searchsongs?term=${term}`);
+
         console.log(response.data);  // Check what the API is returning
         return response.data;
     } catch (error) {
@@ -12,6 +15,7 @@ export const fetchResults = createAsyncThunk('search/fetchSearchResults', async 
         throw new Error('Failed to fetch search results');
     }
 });
+
 
 
 const searchSlice = createSlice({

@@ -3,8 +3,9 @@ const searchRoute = express.Router();
 const Songs = require('../models/songs');
 const Playlist = require('../models/playlist');
 
-searchRoute.get('/search', async (req, res) => {
+searchRoute.get('/searchsongs', async (req, res) => {
   const { term } = req.query;
+  console.log(term);
   try {
     const songQuery = { name: { $regex: term, $options: 'i' } };
     const playlistQuery = { name: { $regex: term, $options: 'i' } };

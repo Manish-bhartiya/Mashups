@@ -46,6 +46,10 @@ const SearchResults = () => {
     }
   };
 
+  const handlePlaylistClick = () => {
+    dispatch(togglePage(false));
+  };
+
   return (
     <div className="search-results container mx-auto p-4 bg-black text-white">
       {/* <input
@@ -110,7 +114,7 @@ const SearchResults = () => {
                       />
                       <MDBCardBody className="ml-6">
                         <Link
-                        onClick={useDispatch(togglePage(false))}
+                        onClick={handlePlaylistClick}
                           to={`/playlist/${playlist.name}`}
                           className="text-lg font-semibold text-white hover:text-gray-400"
                         >

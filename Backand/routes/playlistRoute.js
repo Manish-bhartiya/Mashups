@@ -5,8 +5,8 @@ const playlistController = require('../contorllers/playlistcontorller');
 playlistrouter.post('/createPlaylist', playlistController.createPlaylist);
 playlistrouter.get('/allPlaylist', playlistController.getAllPlaylists);
 playlistrouter.post('/addToPlaylist  ', playlistController.addSongsToPlaylist);
-playlistrouter.post('/get-by-name', playlistController.getPlaylistByName);
+playlistrouter.get('/get-by-name', playlistController.getPlaylistByName);
 playlistrouter.get('/:playlistName', playlistController.getSongsByPlaylistName);
 
 module.exports = playlistrouter;
-        
+    

@@ -8,12 +8,12 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-const PlaylistSongs = ({ playlistName }) => {
+const AlbumSongs = ({ AlbumName }) => {
   const currentSongIndex = useSelector((state) => state.audio.currentSongIndex);
   const isPlaying = useSelector((state) => state.audio.isPlaying);
 
-  const [playlist, setPlaylist] = useState(null);
-  const [playlistsongs, setPlaylistsongs] = useState([]);
+  const [album, setAlbum] = useState(null);
+  const [albumsongs, setAlbumsongs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [songid, setSongid] = useState(null);
@@ -35,7 +35,7 @@ const PlaylistSongs = ({ playlistName }) => {
         //   `http://localhost:4001/api/getFavorites?userId=${user._id}`
         // );
 
-        const response = apiconnecter('get',`users/getFavorites?userId=${user._id}`);
+        const response = await apiconnecter('get',`users/getFavorites?userId=${user._id}`);
 
         setFavoriteSongs(response.data.favoriteSongs);
       } catch (err) {
@@ -50,28 +50,34 @@ const PlaylistSongs = ({ playlistName }) => {
   }, [dispatch]);
 
   useEffect(() => {
-    const fetchPlaylistAndSongs = async () => {
+    const fetchAlbumAndSongs = async () => {
       try {
-        const response = await apiconnecter("get", `playlists/${playlistName}`);
+        const response = await apiconnecter("get", `albums/${AlbumName}`);
+        // const response = await axios.get(`http://localhost:4001/api/${AlbumName}`);
 
-        // const response = await axios.get(`http://localhost:4001/api/play/${playlistName}`);
-        const { playlist: playlistData, songs: songsData } = response.data;
+        const albumData = response.data.album;
+        if(albumData){
+          const songsData = albumData.songs;
+          console.log(albumData);
+          console.log(songsData);
 
-        setPlaylist(playlistData);
-        setPlaylistsongs(songsData);
-        dispatch(setSongs(songsData));
+          setAlbum(albumData);
+          setAlbumsongs(songsData);
+          dispatch(setSongs(songsData));
+
+        }
       } catch (error) {
-        setError("Error fetching playlist and songs.");
-        console.error("Error fetching playlist and songs:", error);
+        setError("Error fetching album and songs.");
+        console.error("Error fetching album and songs:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    if (playlistName) {
-      fetchPlaylistAndSongs();
+    if (AlbumName) {
+      fetchAlbumAndSongs();
     }
-  }, [playlistName, dispatch]);
+  }, [AlbumName, dispatch]);
 
   const handleSongClick = (index, _id) => {
     setSongid(_id);
@@ -96,9 +102,9 @@ const PlaylistSongs = ({ playlistName }) => {
         //   params: { songId: _id, userId: user._id },
         // });
 
-        await apiconnecter('delete',`users/removeFavorite`,{
-          params: { songId: _id, userId: user._id },
-        });
+        await apiconnecter('delete','users/removeFavorite', {
+            params: { songId: _id, userId: user._id },
+          })
 
 
         setFavoriteSongs((prev) =>
@@ -113,17 +119,18 @@ const PlaylistSongs = ({ playlistName }) => {
       try {
         const formData = { songId: _id, userId: user._id };
 
+
         // await axios.post(`http://localhost:4001/api/addFavorite`, formData, {
         //   headers: {
         //     "Content-Type": "application/json",
         //   },
         // });
 
-        await apiconnecter('post','ausers/ddFavorite', formData, {
+        await apiconnecter('post','users/addFavorite', formData, {
           headers: {
             "Content-Type": "application/json",
           },
-        });
+        })
 
 
         setFavoriteSongs((prev) => [...prev, { _id }]);
@@ -155,21 +162,21 @@ const PlaylistSongs = ({ playlistName }) => {
       <div className="max-w-5xl mx-auto">
         {/* Playlist Info */}
         <div className="text-center mb-8">
-          {playlist && (
+          {album && (
             <>
               <img
-                src={playlist.image}
-                alt={playlist.name}
+                src={album.image}
+                alt={album.name}
                 className="w-40 h-40 md:w-60 md:h-60 lg:w-80 lg:h-80 mx-auto shadow-lg mb-4 object-cover rounded-full"
               />
-              <h2 className="text-2xl md:text-3xl font-bold">{playlist.name}</h2>
+              <h2 className="text-2xl md:text-3xl font-bold">{album.name}</h2>
             </>
           )}
         </div>
 
         {/* Playlist Songs */}
         <ul className="bg-black overflow-y-scroll border border-gray-700 max-h-[70vh] rounded-lg">
-          {playlistsongs.map((song, index) => (
+          {albumsongs.map((song, index) => (
             <li
               key={song._id}
               className={`flex items-center justify-between p-4 hover:bg-gray-700 transition duration-300 cursor-pointer ${
@@ -207,4 +214,4 @@ const PlaylistSongs = ({ playlistName }) => {
   );
 };
 
-export default PlaylistSongs;
+export default AlbumSongs;

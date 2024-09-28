@@ -9,6 +9,9 @@ const userSchema = mongoose.Schema({
     password:{
         type:String
     },
+    Image:{
+        type:String
+    },
     favoriteSongs:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:'Songs'

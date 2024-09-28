@@ -4,7 +4,8 @@ import { apiconnecter } from "../services/apiconnecter";
 
 export const fetchAlbum = createAsyncThunk('allAlbums/fetchAlbum', async() =>{
     try {
-        const response = await apiconnecter('get','/allAlbums');
+        const response = await apiconnecter('get','albums/allAlbums');
+        // const response = await axios.get(`http://localhost:4001/api/allAlbums`);
         if(Array.isArray(response.data.albums)){
             return response.data.albums;
         }else{

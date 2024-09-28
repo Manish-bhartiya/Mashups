@@ -16,6 +16,8 @@ import { useSelector } from "react-redux";
 import { selectAuthUser } from "./features/authSlice";
 import SearchResults from "./components/searchResulst";
 import FavoriteSongs from "./components/favorites";
+import Userprofile from "./components/userProfile";
+import AlbumSongs from "./components/albumSongs";
 
 const App = () => {
   const authUser = useSelector(selectAuthUser);
@@ -32,9 +34,11 @@ const App = () => {
           <Routes>
             <Route path="/" element={ authUser ? <Home/> : <Navigate to= "/signin"/>}/>
             <Route path="/playlist/:playlistName" element={authUser ? <PlaylistSongsWrapper /> : <Navigate to="/signin"/> }/>
+            <Route path="/app/:AlbumName" element={authUser ? <AlbumSongsWrapper/> : <Navigate to="/signin"/> }/>
             <Route path="/signin" element={<SigninPage/>}/>
             <Route path="/signup" element={<SignupPage/>}/>
             <Route path="/favorites" element={<FavoriteSongs/>}/>
+            <Route path="/profile" element={<Userprofile/>}/>
           </Routes>
             )}
              {/* <Album/> */}
@@ -50,4 +54,8 @@ const PlaylistSongsWrapper = () => {
   return <PlaylistSongs playlistName={playlistName} />;
 };
 
+const AlbumSongsWrapper = () => {
+  const { AlbumName } = useParams();
+  return <AlbumSongs AlbumName={AlbumName} />;
+};
 export default App;

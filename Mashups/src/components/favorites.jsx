@@ -3,8 +3,10 @@ import axios from "axios";
 import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from "react-redux";
 import { FaRegHeart } from "react-icons/fa6";
+import { FaHeart } from "react-icons/fa";
 
-import { setSongs, setCurrentSongIndex, togglePlayPause } from "../features/audioSlice";
+import { setSongs, setCurrentSongIndex, togglePlayPause, prevSong } from "../features/audioSlice";
+import { apiconnecter } from "../services/apiconnecter";
 
 const FavoriteSongs = () => {
   const currentSongIndex = useSelector((state) => state.audio.currentSongIndex);
@@ -25,9 +27,14 @@ const FavoriteSongs = () => {
           toast.error("User not found. Please log in again.");
           return;
         }
-        const response = await axios.get(
-          `http://localhost:4001/user/getFavorites?userId=${user._id}`
-        );
+
+
+        // const response = await axios.get(
+        //   `http://localhost:4001/api/getFavorites?userId=${user._id}`
+        // );
+
+        const response = await apiconnecter('get',`users/getFavorites?userId=${user._id}`);
+        
         setFavoriteSongs(response.data.favoriteSongs);
         dispatch(setSongs(response.data.favoriteSongs));
       } catch (err) {
@@ -50,6 +57,45 @@ const FavoriteSongs = () => {
   if (loading) return <div className="text-center mt-8">Loading...</div>;
   if (error) return <div className="text-center mt-8">{error}</div>;
 
+  const removeSongFromFavorites = async (_id) => {
+    try {
+      // Retrieve user information from localStorage
+      const user = JSON.parse(localStorage.getItem("Users"));
+      
+      if (user && user._id) {
+        const userId = user._id;
+  
+        // Make the API request to add the song to favorites
+        // const response = await axios.delete('http://localhost:4001/api/removeFavorite',{
+        //   params:{
+        //     songId:_id,
+        //     userId
+        //   }
+        // });
+
+        const response = await apiconnecter('delete','users/removeFavorite',{
+          params:{
+            songId:_id,
+            userId
+          }
+        })
+
+        setFavoriteSongs((prevSong) =>
+          prevSong.filter((song) => song._id !== _id)
+        )
+  
+        // Log the response or handle success
+        console.log("Song added to favorites:", response.data);
+        toast.success("Song removed from favorites successfully");
+      } else {
+        setError("User not found. Please login again.");
+      }
+    } catch (error) {
+      setError("Failed to add to favorites!");
+      console.error("Error adding song to favorites:", error);
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-900 p-5 text-white">
       <div className="text-center mb-8">
@@ -71,9 +117,10 @@ const FavoriteSongs = () => {
                 >
                   {index + 1}. {song.name}
                 </p>
-                <FaRegHeart />
+              
 
-                <p className="flex-1 text-right text-white">{song.artist}</p>
+                <p className="flex-1 text-right pr-4 text-white md:text-lg">{song.artist}</p>
+                <FaHeart className="" onClick={() => {removeSongFromFavorites(song._id)}}/>
               </li>
             ))
           ) : (

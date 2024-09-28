@@ -36,7 +36,7 @@ function Cart() {
               {Array.isArray(playlists) &&
                 playlists.map((playlist) => (
                   <SwiperSlide key={playlist._id}>
-                    <MDBCard className="bg-black flex flex-col justify-center hover:shadow-2xl ">
+                    <MDBCard className="bg-black flex flex-col justify-center items-center hover:shadow-2xl ">
                       <MDBCardImage
                         className="rounded-full opacity-90 transition-opacity duration-300 hover:opacity-50  "
                         src={playlist.image}

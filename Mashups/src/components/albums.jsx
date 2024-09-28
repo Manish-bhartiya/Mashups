@@ -34,16 +34,17 @@ function Album() {
               {Array.isArray(allAlbums) &&
                 allAlbums.map((album) => (
                   <SwiperSlide key={album._id} className="">
-                    <MDBCard className=" bg-black flex  flex-col justify-center hover:shadow-xl">
+                    <MDBCard className=" bg-black flex  flex-col justify-center items-center hover:shadow-xl">
                       <MDBCardImage
                         className=" rounded-md opacity-90 transition-opacity duration-300 hover:opacity-50"
                         src={album.image}
                         alt={`${album.name} cover`}
                         style={{ height: "150px",width:"150px", objectFit: "cover" }}
                       />
-                      <MDBCardBody className="ml-6">
+                      <MDBCardBody>
                         <Link
-                          to={`/playlist/${album.name}`}
+                          to={`/app/${album.name}`}
+                          
                           className="text-lg font-semibold  text-white hover:text-gray-400"
                         >
                           {album.name}

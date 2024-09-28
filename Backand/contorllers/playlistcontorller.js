@@ -82,14 +82,14 @@ const addSongsToPlaylist = async (req, res) => {
   }
 };
 
-// Function to get playlist by name and populate songs
+
 const getPlaylistByName = async (req, res) => {
   try {
     const { playlistName } = req.body;
+    console.log(playlistName); 
 
-    const playlist = await Playlist.findOne({ name: playlistName }).populate(
-      "songs"
-    );
+   
+    const playlist = await Playlist.findOne({ name: playlistName }).populate("songs");
 
     if (!playlist) {
       return res.status(404).json({ message: "Playlist not found" });
@@ -97,12 +97,11 @@ const getPlaylistByName = async (req, res) => {
 
     res.status(200).json({ playlist });
   } catch (error) {
-    console.error("Error fetching playlist:", error); // Log the error
-    res
-      .status(500)
-      .json({ message: "Error fetching playlist", error: error.message });
+    console.error("Error fetching playlist:", error); 
+    res.status(500).json({ message: "Error fetching playlist", error: error.message });
   }
 };
+
 
 const getSongsByPlaylistName = async (req, res) => {
   try {

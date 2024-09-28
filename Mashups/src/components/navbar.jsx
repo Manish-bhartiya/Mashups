@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectAuthUser } from '../features/authSlice';
 import { fetchResults, togglePage } from '../features/searchSlice';
 import SearchBar from './searchbar';
+import Userprofile from './userProfile';
 
 const Navbar = () => {
   const authUser = useSelector(selectAuthUser);
@@ -118,10 +119,11 @@ const Navbar = () => {
         )}
 
         {/* Desktop Menu */}
-        <div className="navbar-end hidden lg:flex items-center">
+        <div className="navbar-end hidden lg:flex items-center gap-4">
           <ul className="menu flex gap-10">{navItems}</ul>
           {authUser ? (
-            <Logout />
+            // <Logout />
+            <Userprofile/>
           ) : (
             <div className="p-2">
               <Link

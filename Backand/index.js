@@ -30,12 +30,13 @@ app.get('/', (req, res) => {
     res.status(200).json({ message: "Hello There" });
 });
 
-app.use("/api", playlistrouter);
-app.use("/api", songrouter);
-app.use("/api", albumtrouter);
-app.use("/api", userRoute);
-app.use("/api", searchRoute);
-app.use('/api', cloudinaryRouter);
+app.use("/api/playlists", playlistrouter);
+app.use("/api/songs", songrouter);
+app.use("/api/albums", albumtrouter);
+app.use("/api/users", userRoute);
+app.use("/api/search", searchRoute);
+app.use("/api/cloudinary", cloudinaryRouter);
+
 
 // Start the server
 const PORT = process.env.PORT || 3000;

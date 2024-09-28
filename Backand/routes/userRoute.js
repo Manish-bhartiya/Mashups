@@ -1,9 +1,10 @@
 const express = require("express");
 const { Signup,Login,deleteUser, addSongInFavorites, removeSongFromFavorites, getFavoriteSongs } = require("../contorllers/userscontroller");
+const upload = require("../utils/multer");
 const userRoute = express.Router();
 
 
-userRoute.post("/signup",Signup);
+userRoute.post("/signup",upload,Signup);
 userRoute.post("/login",Login);
 userRoute.delete("/user",deleteUser);
 
