@@ -32,9 +32,9 @@ const App = () => {
           <SearchResults />
         ) : (
           <Routes>
-            <Route path="/" element={ authUser ? <Home/> : <Navigate to= "/signin"/>}/>
-            <Route path="/playlist/:playlistName" element={authUser ? <PlaylistSongsWrapper /> : <Navigate to="/signin"/> }/>
-            <Route path="/app/:AlbumName" element={authUser ? <AlbumSongsWrapper/> : <Navigate to="/signin"/> }/>
+            <Route path="/" element={ <Home/> }/>
+            <Route path="/playlist/:playlistName" element={ <PlaylistSongsWrapper /> }/>
+            <Route path="/app/:AlbumName" element={<AlbumSongsWrapper/>  }/>
             <Route path="/signin" element={<SigninPage/>}/>
             <Route path="/signup" element={<SignupPage/>}/>
             <Route path="/favorites" element={<FavoriteSongs/>}/>

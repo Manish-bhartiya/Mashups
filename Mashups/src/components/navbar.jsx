@@ -42,10 +42,10 @@ const Navbar = () => {
   const handleInputChange = (e) => {
     setTerm(e.target.value);
     if (e.target.value.trim()) {
-        dispatch(fetchResults(e.target.value));
-        dispatch(togglePage(true));
+      dispatch(fetchResults(e.target.value));
+      dispatch(togglePage(true));
     } else {
-        dispatch(togglePage(false));
+      dispatch(togglePage(false));
     }
   };
 
@@ -72,10 +72,7 @@ const Navbar = () => {
         {/* Mobile Dropdown Button */}
         <div className="navbar-start flex items-center">
           <div className="lg:hidden">
-            <button
-              className="btn btn-ghost"
-              onClick={toggleDropdown}
-            >
+            <button className="btn btn-ghost" onClick={toggleDropdown}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -94,10 +91,7 @@ const Navbar = () => {
           </div>
 
           {/* Logo */}
-          <Link
-            to="/"
-            className="font-extrabold block"
-          >
+          <Link to="/" className="font-extrabold block">
             <img
               src="https://res.cloudinary.com/dhfjy459o/image/upload/v1722677369/logo_2-removebg-preview_nwfo5w.png"
               alt="Logo"
@@ -144,3 +138,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+  

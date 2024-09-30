@@ -1,4 +1,3 @@
-// Cart.jsx
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchPlaylist } from "../features/playlistslice";
@@ -8,7 +7,6 @@ import "swiper/css";
 import 'swiper/css/bundle';
 
 import { MDBCard, MDBCardBody, MDBCardImage } from "mdb-react-ui-kit";
-import Album from "./albums";
 
 function Cart() {
   const dispatch = useDispatch();
@@ -22,32 +20,40 @@ function Cart() {
   }, [playlistStatus, dispatch]);
 
   return (
-    <div className="">
+    <div className="min-h-screen bg-black px-4 py-6">
       <main>
         <section>
           <div>
-            <h1 className="text-white text-3xl mb-4">Artists</h1>
+            <h1 className="text-white text-3xl mb-6">Artists</h1>
             <Swiper
               spaceBetween={10}
-              slidesPerView={5}
+              slidesPerView={2} // Adjust for mobile
+              breakpoints={{
+                640: { slidesPerView: 3 }, // For larger screens
+                768: { slidesPerView: 4 },
+                1024: { slidesPerView: 5 },
+              }}
               onSlideChange={() => console.log("slide change")}
               onSwiper={(swiper) => console.log(swiper)}
             >
               {Array.isArray(playlists) &&
                 playlists.map((playlist) => (
                   <SwiperSlide key={playlist._id}>
-                    <MDBCard className="bg-black flex flex-col justify-center items-center hover:shadow-2xl ">
+                    <MDBCard className="bg-black flex flex-col justify-center items-center hover:shadow-2xl p-2">
                       <MDBCardImage
-                        className="rounded-full opacity-90 transition-opacity duration-300 hover:opacity-50  "
+                        className="rounded-full opacity-90 transition-opacity duration-300 hover:opacity-50"
                         src={playlist.image}
                         alt={`${playlist.name} cover`}
-                        style={{ height: "150px", width: "150px", objectFit: "cover" }}
-                       
+                        style={{
+                          height: "120px", // Adjusted height for better mobile fit
+                          width: "120px",
+                          objectFit: "cover",
+                        }}
                       />
-                      <MDBCardBody className="ml-6">
+                      <MDBCardBody className="text-center mt-2">
                         <Link
                           to={`/playlist/${playlist.name}`}
-                          className="text-lg font-semibold text-white hover:text-gray-400"
+                          className="text-md font-semibold text-white hover:text-gray-400"
                         >
                           {playlist.name}
                         </Link>

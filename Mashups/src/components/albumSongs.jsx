@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { setSongs, setCurrentSongIndex, togglePlayPause } from "../features/audioSlice";
 import { apiconnecter } from "../services/apiconnecter";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import axios from "axios";
 import toast from "react-hot-toast";
 
 const AlbumSongs = ({ AlbumName }) => {
@@ -31,11 +30,10 @@ const AlbumSongs = ({ AlbumName }) => {
           return;
         }
 
-        // const response = await axios.get(
-        //   `http://localhost:4001/api/getFavorites?userId=${user._id}`
-        // );
-
-        const response = await apiconnecter('get',`users/getFavorites?userId=${user._id}`);
+        const response = await apiconnecter(
+          "get",
+          `users/getFavorites?userId=${user._id}`
+        );
 
         setFavoriteSongs(response.data.favoriteSongs);
       } catch (err) {
@@ -53,10 +51,9 @@ const AlbumSongs = ({ AlbumName }) => {
     const fetchAlbumAndSongs = async () => {
       try {
         const response = await apiconnecter("get", `albums/${AlbumName}`);
-        // const response = await axios.get(`http://localhost:4001/api/${AlbumName}`);
 
         const albumData = response.data.album;
-        if(albumData){
+        if (albumData) {
           const songsData = albumData.songs;
           console.log(albumData);
           console.log(songsData);
@@ -64,7 +61,6 @@ const AlbumSongs = ({ AlbumName }) => {
           setAlbum(albumData);
           setAlbumsongs(songsData);
           dispatch(setSongs(songsData));
-
         }
       } catch (error) {
         setError("Error fetching album and songs.");
@@ -98,14 +94,9 @@ const AlbumSongs = ({ AlbumName }) => {
 
     if (isFavorite(_id)) {
       try {
-        // await axios.delete(`http://localhost:4001/api/removeFavorite`, {
-        //   params: { songId: _id, userId: user._id },
-        // });
-
-        await apiconnecter('delete','users/removeFavorite', {
-            params: { songId: _id, userId: user._id },
-          })
-
+        await apiconnecter("delete", "users/removeFavorite", {
+          params: { songId: _id, userId: user._id },
+        });
 
         setFavoriteSongs((prev) =>
           prev.filter((favSong) => favSong._id !== _id)
@@ -119,19 +110,11 @@ const AlbumSongs = ({ AlbumName }) => {
       try {
         const formData = { songId: _id, userId: user._id };
 
-
-        // await axios.post(`http://localhost:4001/api/addFavorite`, formData, {
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        // });
-
-        await apiconnecter('post','users/addFavorite', formData, {
+        await apiconnecter("post", "users/addFavorite", formData, {
           headers: {
             "Content-Type": "application/json",
           },
-        })
-
+        });
 
         setFavoriteSongs((prev) => [...prev, { _id }]);
         toast.success("Song added to favorites.");
@@ -191,13 +174,13 @@ const AlbumSongs = ({ AlbumName }) => {
               >
                 {index + 1}. {song.name}
               </p>
-              
+
               <p className="flex-1 text-right pr-4 text-sm md:text-lg text-white">
                 {song.artist}
               </p>
               {isFavorite(song._id) ? (
                 <FaHeart
-                  className=" cursor-pointer"
+                  className="cursor-pointer"
                   onClick={() => toggleFavorite(song._id)}
                 />
               ) : (

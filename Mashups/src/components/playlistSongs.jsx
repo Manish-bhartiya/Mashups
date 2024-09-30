@@ -92,14 +92,19 @@ const PlaylistSongs = ({ playlistName }) => {
 
     if (isFavorite(_id)) {
       try {
-        // await axios.delete(`http://localhost:4001/api/removeFavorite`, {
-        //   params: { songId: _id, userId: user._id },
+        
+        // await axios.delete(`http://localhost:4001/api/users/removeFavorite`, {
+        //   data: { songId: _id, userId: user._id },
         // });
-
-        await apiconnecter('delete',`users/removeFavorite`,{
-          params: { songId: _id, userId: user._id },
+        // await apiconnecter('delete', 'users/removeFavorite', {
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //   },
+        //   bodydata: { songId: _id, userId: user._id },  // Use 'data' inside the config object for axios DELETE requests
+        // });
+        await apiconnecter('delete', 'users/removeFavorite', {
+          data: { songId: _id, userId: user._id },
         });
-
 
         setFavoriteSongs((prev) =>
           prev.filter((favSong) => favSong._id !== _id)
@@ -111,7 +116,7 @@ const PlaylistSongs = ({ playlistName }) => {
       }
     } else {
       try {
-        const formData = { songId: _id, userId: user._id };
+        // const formData = { songId: _id, userId: user._id };
 
         // await axios.post(`http://localhost:4001/api/addFavorite`, formData, {
         //   headers: {
@@ -119,7 +124,9 @@ const PlaylistSongs = ({ playlistName }) => {
         //   },
         // });
 
-        await apiconnecter('post','ausers/ddFavorite', formData, {
+        const formData = { songId: _id, userId: user._id };
+
+        await apiconnecter("post", "users/addFavorite", formData, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -168,11 +175,11 @@ const PlaylistSongs = ({ playlistName }) => {
         </div>
 
         {/* Playlist Songs */}
-        <ul className="bg-black overflow-y-scroll border border-gray-700 max-h-[70vh] rounded-lg">
+        <ul className="bg-black overflow-y-scroll md:size-auto border border-gray-700 max-h-[70vh] rounded-lg">
           {playlistsongs.map((song, index) => (
             <li
               key={song._id}
-              className={`flex items-center justify-between p-4 hover:bg-gray-700 transition duration-300 cursor-pointer ${
+              className={`flex items-center justify-between p-4  hover:bg-gray-700 transition duration-300 cursor-pointer ${
                 songid === song._id ? "bg-gray-800" : "bg-black"
               }`}
               onClick={() => handleSongClick(index, song._id)}

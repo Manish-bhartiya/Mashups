@@ -1,11 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { FaPause, FaPlay, FaStepBackward, FaStepForward } from 'react-icons/fa';
 import { IoIosVolumeHigh } from 'react-icons/io';
-import { FaHeart } from "react-icons/fa";
-
 import { useDispatch, useSelector } from 'react-redux';
 import { stopAudio, togglePlayPause, prevSong, nextSong } from '../features/audioSlice';
-import { FaRegHeart } from "react-icons/fa6";
 
 const AudioPlayer = () => {
   const dispatch = useDispatch();
@@ -37,7 +34,6 @@ const AudioPlayer = () => {
       const handleEnded = () => {
         dispatch(nextSong());
         dispatch(togglePlayPause(true));
-
       };
 
       audio.addEventListener('timeupdate', handleTimeUpdate);
@@ -48,10 +44,10 @@ const AudioPlayer = () => {
         audio.removeEventListener('timeupdate', handleTimeUpdate);
         audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
         audio.removeEventListener('ended', handleEnded);
-
       };
     }
   }, [currentSongIndex, songs]);
+
   useEffect(() => {
     if (audioRef.current && currentSongIndex !== null && songs[currentSongIndex]) {
       audioRef.current.src = songs[currentSongIndex].url;
@@ -115,30 +111,27 @@ const AudioPlayer = () => {
   if (currentSongIndex === null || !songs[currentSongIndex]) return null;
 
   return (
-    <div className="fixed flex items-center bg-gradient-to-r from-gray-800 to-gray-600 bottom-0 left-0 right-0 p-2 rounded-t-lg shadow-lg z-50">
-      
+    <div className="fixed flex items-center bg-gradient-to-r from-gray-800 to-gray-600 bottom-0 left-0 right-0 p-4 rounded-t-lg shadow-lg z-50">
       {/* Song Image */}
-      <div className="mr-6">
+      <div className="mr-4">
         <img
           src={songs[currentSongIndex].image}
           alt="Song cover"
-          className="w-20 h-20 object-cover rounded-lg shadow-md"
+          className="w-16 h-16 object-cover rounded-lg shadow-md"
         />
       </div>
-  
+
       {/* Song Details and Controls */}
       <div className="flex flex-col flex-grow">
-        
         {/* Song Title */}
-        <div className="text-white">
-          <h2 className="text-xl font-bold">{songs[currentSongIndex]?.name || 'Unknown Song'}</h2>
+        <div className="text-white text-sm md:text-base">
+          <h2 className="font-bold">{songs[currentSongIndex]?.name || 'Unknown Song'}</h2>
         </div>
-  
+
         {/* Controls Row */}
-        <div className="flex items-center justify-between mt-4 w-full">
-          
+        <div className="flex items-center justify-between mt-2 w-full">
           {/* Control Buttons */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             <button
               className={`${
                 currentSongIndex > 0 ? 'text-white hover:text-emerald-400' : 'text-gray-500'
@@ -167,25 +160,24 @@ const AudioPlayer = () => {
               <FaStepForward size={20} />
             </button>
           </div>
-  
+
           {/* Progress Bar with Current Time and Duration */}
-          <div className="flex-grow mx-4 flex items-center space-x-4">
-            
+          <div className="flex-grow mx-4  flex items-center space-x-2">
             {/* Current Time */}
-            <span className="text-sm text-gray-300">{formatTime(currentTime)}</span>
-  
+            <span className="text-xs text-gray-300">{formatTime(currentTime)}</span>
+
             {/* Progress Bar */}
-            <div className="relative w-full h-2 bg-gray-500 rounded-full cursor-pointer" onClick={handleProgressClick}>
+            <div className="relative w-full h-1 bg-gray-500 rounded-full cursor-pointer" onClick={handleProgressClick}>
               <div className="absolute top-0 left-0 h-full bg-emerald-400 rounded-full" style={{ width: `${progress}%` }}></div>
             </div>
-  
+
             {/* Duration */}
-            <span className="text-sm text-gray-300">{formatTime(duration)}</span>
+            <span className="text-xs text-gray-300">{formatTime(duration)}</span>
           </div>
-  
+
           {/* Volume Control */}
           <div className="flex items-center">
-            <IoIosVolumeHigh className="text-white" size={24} />
+            <IoIosVolumeHigh className="text-white" size={20} />
             <input
               id="volume"
               type="range"
@@ -194,12 +186,12 @@ const AudioPlayer = () => {
               step="0.01"
               value={volume}
               onChange={handleVolumeChange}
-              className="cursor-pointer ml-3 w-24 accent-emerald-400 rounded-lg"
+              className="cursor-pointer ml-2 w-20 accent-emerald-400 rounded-lg"
             />
           </div>
         </div>
       </div>
-  
+
       {/* Hidden Audio Element */}
       <audio ref={audioRef} className="hidden">
         <source src={songs[currentSongIndex]?.url} type="audio/mpeg" />
@@ -207,8 +199,6 @@ const AudioPlayer = () => {
       </audio>
     </div>
   );
-  
-  
 };
 
 export default AudioPlayer;

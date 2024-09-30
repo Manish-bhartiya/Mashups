@@ -120,24 +120,30 @@ exports.addSongInFavorites = async (req, res) => {
 
 // Remove Song from Favorites Controller
 exports.removeSongFromFavorites = async (req, res) => {
-  const { songId, userId } = req.body; // Using req.body for consistency
+  console.log(req.query);
+  const { songId, userId } = req.body;  // Extract songId and userId from the query params
+  console.log(songId, userId)
 
   try {
     const user = await users.findById(userId);
+    console.log(user);
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Remove song from favorites
+    // Remove the song from the user's favorite songs
     user.favoriteSongs = user.favoriteSongs.filter(id => id.toString() !== songId);
     await user.save();
 
-    return res.status(200).json({ message: "Song removed from favorites", favoriteSongs: user.favoriteSongs });
+    return res.status(200).json({
+      message: "Song removed from favorites",
+      favoriteSongs: user.favoriteSongs
+    });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
-};
+};    
 
 // Get Favorite Songs Controller
 exports.getFavoriteSongs = async (req, res) => {
