@@ -86,44 +86,48 @@ const AlbumSongs = ({ AlbumName }) => {
   };
 
   const toggleFavorite = async (_id) => {
-    const user = JSON.parse(localStorage.getItem("Users"));
-    if (!user) {
+    // Retrieve user information from localStorage
+    const user = JSON.parse(localStorage.getItem("Users") || "{}");
+    if (!user || !user._id) {
       toast.error("User not found. Please log in again.");
       return;
     }
-
+  
     if (isFavorite(_id)) {
+      // Remove from favorites
       try {
         await apiconnecter("delete", "users/removeFavorite", {
-          params: { songId: _id, userId: user._id },
+           songId: _id,
+           userId: user._id 
         });
-
-        setFavoriteSongs((prev) =>
-          prev.filter((favSong) => favSong._id !== _id)
-        );
+  
+        // Update favoriteSongs state
+        setFavoriteSongs((prev) => prev.filter((favSong) => favSong._id !== _id));
         toast.success("Song removed from favorites.");
       } catch (error) {
-        console.error("Failed to remove from favorites:", error);
+        console.error("Failed to remove from favorites:", error.response?.data || error.message);
         toast.error("Failed to remove from favorites.");
       }
     } else {
+      // Add to favorites
       try {
         const formData = { songId: _id, userId: user._id };
-
-        await apiconnecter("post", "users/addFavorite", formData, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
+  
+        await apiconnecter("post", "users/addFavorite", formData);
+  
+        // Update favoriteSongs state
         setFavoriteSongs((prev) => [...prev, { _id }]);
         toast.success("Song added to favorites.");
       } catch (error) {
-        console.error("Failed to add to favorites:", error);
+        console.error("Failed to add to favorites:", error.response?.data || error.message);
         toast.error("Failed to add to favorites.");
       }
     }
   };
+  
+  // Helper function to check if a song is in the favorites
+  // const isFavorite = (id) => favoriteSongs.some((song) => song._id === id);
+  
 
   if (loading) {
     return <div className="text-center mt-8">Loading...</div>;

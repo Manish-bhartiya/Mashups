@@ -103,7 +103,7 @@ const PlaylistSongs = ({ playlistName }) => {
         //   bodydata: { songId: _id, userId: user._id },  // Use 'data' inside the config object for axios DELETE requests
         // });
         await apiconnecter('delete', 'users/removeFavorite', {
-          data: { songId: _id, userId: user._id },
+          songId: _id, userId: user._id
         });
 
         setFavoriteSongs((prev) =>

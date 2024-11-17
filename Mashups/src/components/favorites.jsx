@@ -49,27 +49,39 @@ const FavoriteSongs = () => {
 
   const removeSongFromFavorites = async (_id) => {
     try {
+      // Fetch user data from localStorage
       const user = JSON.parse(localStorage.getItem("Users"));
+      
       if (user && user._id) {
         const userId = user._id;
-
+        console.log(`Removing song with ID: ${_id} for user ID: ${userId}`);
+    
+        // Call the API to remove the song from the favorites
         await apiconnecter('delete', 'users/removeFavorite', {
-          params: { songId: _id, userId }
+          songId: _id, userId: userId // Pass data in the 'data' field
         });
-
+  
+        // Update the local state by removing the song from the list
         setFavoriteSongs((prevSong) =>
           prevSong.filter((song) => song._id !== _id)
         );
-
+  
+        // Show success message
         toast.success("Song removed from favorites successfully");
       } else {
         setError("User not found. Please login again.");
       }
     } catch (error) {
+      // Log specific error message for debugging
+      console.error("Error removing song from favorites:", error.response ? error.response.data : error.message);
+  
+      // Display error to the user
       setError("Failed to remove from favorites!");
-      console.error("Error removing song from favorites:", error);
     }
   };
+  
+  
+  
 
   if (loading) return <div className="text-center mt-8">Loading...</div>;
   if (error) return <div className="text-center mt-8">{error}</div>;

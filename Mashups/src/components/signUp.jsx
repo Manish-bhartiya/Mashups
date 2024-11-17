@@ -80,7 +80,7 @@ const SignupPage = () => {
         toast.error("Failed to add user");
       }
     } catch (err) {
-      toast.error("Error: " + (err.response?.data?.message || "Something went wrong"));
+      toast.error("Error: " + ( "Something went wrong"));
     }
   };
 
@@ -152,7 +152,7 @@ const SignupPage = () => {
                     name="file"
                     type="file"
                     accept="image/*" // Accept image files only
-                    required
+                    // required
                     className="w-full pl-3 pr-4 py-2 rounded-md transition-all duration-300 outline-none bg-gray-600 text-gray-100 placeholder-gray-400 focus:bg-gray-500"
                     onChange={handleChange}
                   />

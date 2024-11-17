@@ -6,9 +6,9 @@ const cloudinaryUploader = require('../utils/imageUploder');
 exports.Signup = async (req, res) => {
   try {
     // Check if file was uploaded
-    if (!req.file) {
-      return res.status(400).json({ message: 'No file uploaded' });
-    }
+    // if (!req.file) {
+    //   return res.status(400).json({ message: 'No file uploaded' });
+    // }
 
     // Upload file (either image or audio) to Cloudinary
     const { success, result, error } = await cloudinaryUploader(req);
@@ -120,30 +120,48 @@ exports.addSongInFavorites = async (req, res) => {
 
 // Remove Song from Favorites Controller
 exports.removeSongFromFavorites = async (req, res) => {
-  console.log(req.query);
-  const { songId, userId } = req.body;  // Extract songId and userId from the query params
-  console.log(songId, userId)
+  console.log(req.body);
+  const { songId, userId } = req.body;
 
-  try {
+    // Validate input
+    if (!songId || !userId) {
+      return res.status(400).json({ error: `Missing ${!songId ? "songId" : "userId"}` });
+    }
+
+    // Find user
+    try{
     const user = await users.findById(userId);
-    console.log(user);
-
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Remove the song from the user's favorite songs
-    user.favoriteSongs = user.favoriteSongs.filter(id => id.toString() !== songId);
+    // Ensure favoriteSongs is initialized
+    if (!Array.isArray(user.favoriteSongs)) {
+      user.favoriteSongs = [];
+    }
+
+    // Remove song from favorites
+    const initialCount = user.favoriteSongs.length;
+    user.favoriteSongs = user.favoriteSongs.filter((id) => id.toString() !== songId.toString());
+
+    if (user.favoriteSongs.length === initialCount) {
+      return res.status(404).json({ error: "Song not found in user's favorites" });
+    }
+
     await user.save();
 
     return res.status(200).json({
-      message: "Song removed from favorites",
-      favoriteSongs: user.favoriteSongs
+      message: "Song removed from favorites successfully",
+      favoriteSongs: user.favoriteSongs,
     });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    console.error("Error removing song from favorites:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
-};    
+};
+
+
+    
 
 // Get Favorite Songs Controller
 exports.getFavoriteSongs = async (req, res) => {
