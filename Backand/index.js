@@ -16,14 +16,10 @@ const app = express();
 
 // Configure CORS to allow requests from any origin
 
-// app.use(cors({
-//     origin:"*",
-//     credentials:true
-// })); // Apply CORS
 app.use(cors({
-    origin: "https://mashups-dbea.vercel.app", // Replace with your client URL
-    credentials: true, // Enable credentials
-}));
+    origin:"*",
+    credentials:true
+})); // Apply CORS
 app.use(bodyParser.json());
 
 // Initialize database connection
