@@ -34,8 +34,7 @@ const SongUploadForm = () => {
     formDataToSend.append("file", formData.file);
 
     try {
-      const response = await axios.post(
-        "http://localhost:4001/api/songs/createsongs",
+      const response = await apiconnecter('post','songs/createsongs',
         formDataToSend,
         { headers: { "Content-Type": "multipart/form-data" } }
       );

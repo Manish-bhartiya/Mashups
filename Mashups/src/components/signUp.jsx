@@ -60,7 +60,7 @@ const SignupPage = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:4001/api/users/signup', data, {
+      const response = await apiconnecter('post','users/signup', data, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
