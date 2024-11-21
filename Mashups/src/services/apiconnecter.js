@@ -2,12 +2,13 @@ import axios from "axios";
 
 // Create an Axios instance
 export const axiosinstance = axios.create({
-  // : "http://localhost:4001/api/",
-  // headers: {
-    //   "Content-Type": "application/json", // Default Content-Type
-    // },
-  });
-  const baseURL = "https://mashupsbackand.vercel.app/api/"; 
+  baseURL: process.env.NODE_ENV === "production" 
+    ? "https://mashupsbackand.vercel.app/api/" 
+    : "http://localhost:4001/api/",
+  headers: {
+    "Content-Type": "application/json", // Default Content-Type
+  },
+});
 
 // Utility function for API calls
 export const apiconnecter = (method, url, bodydata = null, headers = {}, params = {}) => {
