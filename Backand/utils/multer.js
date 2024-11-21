@@ -1,54 +1,32 @@
-// const multer = require('multer');
-
-// const storage = multer.diskStorage({
-//   filename: (req, file, cb) => {
-//     cb(null, `${Date.now()}-${file.originalname}`);
-//   },
-// });
-
-// const fileFilter = (req, file, cb) => {
-//   if (file.mimetype.startsWith('audio/')) {
-//     cb(null, true);
-//   } else {
-//     req.fileValidationError = 'Invalid file type';
-//     cb(null, false);
-//   }
-// };
-
-// const upload = multer({
-//   storage,
-//   fileFilter,
-// }).single('audio');
-
-// module.exports = upload;
-
-
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 
-// Configure storage to store files with unique names
+// Ensure the uploads directory exists
+const UPLOADS_DIR = './uploads/';
+if (!fs.existsSync(UPLOADS_DIR)) {
+  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+}
+
+// Configure Multer storage
 const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, UPLOADS_DIR);
+  },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  }
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+  },
 });
 
-// File filter to allow both image and audio files
+// File filter to allow only audio and image files
 const fileFilter = (req, file, cb) => {
   if (file.mimetype.startsWith('image/') || file.mimetype.startsWith('audio/')) {
-    cb(null, true); // Accept image and audio files
+    cb(null, true);
   } else {
-    req.fileValidationError = 'Invalid file type, only images and audio are allowed';
-    cb(null, false); // Reject files that are not image or audio
+    req.fileValidationError = 'Invalid file type. Only images and audio files are allowed.';
+    cb(null, false);
   }
 };
 
-// Initialize multer with storage and file filter for both image and audio
-const upload = multer({
-  storage,
-  fileFilter,
-  // limits: { fileSize: 10 * 1024 * 2048 }, // 10MB file size limit
-}).single('file'); // Use 'file' as the field name for either image or audio
-
-module.exports = upload;
-
+module.exports = multer({ storage, fileFilter }).single('file'); // 'file' is the field name

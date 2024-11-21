@@ -55,13 +55,13 @@ const Navbar = () => {
         <Link to="/">Home</Link>
       </li>
       <li className="p-2">
-        <Link to="/explore">Explore</Link>
+        <Link to="/Song">Song</Link>
       </li>
       <li className="p-2">
         <Link to="/favorites">Favorites</Link>
       </li>
       <li className="p-2">
-        <Link to="/about">About Us</Link>
+        <Link to="/Album">Album</Link>
       </li>
     </>
   );

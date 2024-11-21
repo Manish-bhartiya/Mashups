@@ -18,6 +18,8 @@ import SearchResults from "./components/searchResulst";
 import FavoriteSongs from "./components/favorites";
 import Userprofile from "./components/userProfile";
 import AlbumSongs from "./components/albumSongs";
+import SongUploadForm from "./components/songForm";
+import CreateAlbum from "./components/albumForm";
 
 const App = () => {
   const authUser = useSelector(selectAuthUser);
@@ -39,6 +41,8 @@ const App = () => {
             <Route path="/signup" element={<SignupPage/>}/>
             <Route path="/favorites" element={<FavoriteSongs/>}/>
             <Route path="/profile" element={<Userprofile/>}/>
+            <Route path="/Song" element={<SongUploadForm/>}/>
+            <Route path="/Album" element={<CreateAlbum/>}/>
           </Routes>
             )}
              {/* <Album/> */}

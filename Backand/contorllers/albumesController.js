@@ -10,20 +10,46 @@ const createAlbum = async (req, res) => {
       return res.status(400).json({ message: "Name and image are required" });
     }
 
+    // Check if the album already exists
+    let existingAlbum = await Albums.findOne({ name });
+
+    if (existingAlbum) {
+      // If album exists, add the songs to it
+      const songDocs = await Songs.insertMany(songs || []);
+      const songIds = songDocs.map((song) => song._id);
+      
+      existingAlbum.songs.push(...songIds); // Add new songs to existing songs
+      await existingAlbum.save(); // Save the updated album
+      
+      return res.status(200).json({
+        message: "Songs added to existing album",
+        album: existingAlbum,
+      });
+    }
+
+    // If album doesn't exist, create a new one
     const songDocs = await Songs.insertMany(songs || []);
     const songIds = songDocs.map((song) => song._id);
 
-    const data = { name, image, songs: songIds };
-    console.log("Creating Albums with data: ", data);
-    const result = await Albums.create(data);
-    res.status(201).json({ message: "Albums created successfully", result });
-  } catch (err) {
-    console.error("Error creating Albums:", err); // Log the error
-    res
-      .status(500)
-      .json({ message: "Error creating Albums", error: err.message });
+    const newAlbum = await Albums.create({
+      name,
+      image,
+      songs: songIds,
+    });
+
+    res.status(201).json({
+      message: "Album created successfully",
+      album: newAlbum,
+    });
+  } catch (error) {
+    console.error("Error creating or updating album:", error.message);
+    res.status(500).json({
+      message: "Error creating or updating album",
+      error: error.message,
+    });
   }
 };
+
 
 const getAllAlbums = async (req, res) => {
     try {
@@ -147,12 +173,6 @@ const getAllAlbums = async (req, res) => {
       res.status(500).json({ message: "Error fetching album", error: error.message });
     }
   };
-  
-  
-  
-  
-
-
 module.exports = {
    createAlbum,
    getAllAlbums,

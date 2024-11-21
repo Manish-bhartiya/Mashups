@@ -48,20 +48,20 @@ function Album() {
                 allAlbums.map((album) => (
                   <SwiperSlide key={album._id}>
                     <MDBCard className="bg-black flex flex-col justify-center items-center hover:shadow-xl">
-                      <MDBCardImage
-                        className="rounded-md opacity-90 transition-opacity duration-300 hover:opacity-50"
-                        src={album.image}
-                        alt={`${album.name} cover`}
-                        style={{ height: "150px", width: "150px", objectFit: "cover" }}
-                      />
-                      <MDBCardBody className="text-center">
-                        <Link
-                          to={`/app/${album.name}`}
-                          className="text-sm md:text-lg font-semibold text-white hover:text-gray-400"
-                        >
-                          {album.name}
-                        </Link>
-                      </MDBCardBody>
+                      {/* Wrap image and name in a single Link */}
+                      <Link to={`/app/${album.name}`} className="text-center">
+                        <MDBCardImage
+                          className="rounded-md opacity-90 transition-opacity duration-300 hover:opacity-50"
+                          src={album.image}
+                          alt={`${album.name} cover`}
+                          style={{ height: "150px", width: "150px", objectFit: "cover" }}
+                        />
+                        <MDBCardBody className="mt-2">
+                          <span className="text-sm md:text-lg font-semibold text-white hover:text-gray-400">
+                            {album.name}
+                          </span>
+                        </MDBCardBody>
+                      </Link>
                     </MDBCard>
                   </SwiperSlide>
                 ))}

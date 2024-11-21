@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema({
     password:{
         type:String
     },
-    Image:{
+    image:{
         type:String
     },
     favoriteSongs:[{

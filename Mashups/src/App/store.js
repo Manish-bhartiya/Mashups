@@ -12,6 +12,6 @@ export const store = configureStore({
     audio: audioReducer,
     album:albumReducer,
     auth: authReducer,      
-    search: searchReducer,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+    search: searchReducer,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
   },
 });

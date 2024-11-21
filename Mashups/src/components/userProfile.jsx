@@ -11,7 +11,7 @@ const Userprofile = () => {
     return null; // Ensure the component doesn't render without a user
   }
 
-  const { name, gmail, Image } = user; // Destructure user details
+  const { name, gmail, image } = user; // Destructure user details
 
   // Toggle dialog box on profile picture click
   const toggleDialog = () => {
@@ -27,7 +27,7 @@ const Userprofile = () => {
       >
         <img
           src={
-            Image ||
+            image ||
             "https://via.placeholder.com/150" // Fallback in case no profile pic is available
           }
           alt="User profile"
@@ -44,7 +44,7 @@ const Userprofile = () => {
           <div className="flex items-center space-x-4">
             <img
               src={
-                Image ||
+                image ||
                 "https://via.placeholder.com/150" // Fallback in case no profile pic is available
               }
               alt="User profile"

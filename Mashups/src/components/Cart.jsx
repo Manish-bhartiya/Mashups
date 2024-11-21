@@ -4,7 +4,7 @@ import { fetchPlaylist } from "../features/playlistslice";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import 'swiper/css/bundle';
+import "swiper/css/bundle";
 
 import { MDBCard, MDBCardBody, MDBCardImage } from "mdb-react-ui-kit";
 
@@ -40,24 +40,25 @@ function Cart() {
                 playlists.map((playlist) => (
                   <SwiperSlide key={playlist._id}>
                     <MDBCard className="bg-black flex flex-col justify-center items-center hover:shadow-2xl p-2">
-                      <MDBCardImage
-                        className="rounded-full opacity-90 transition-opacity duration-300 hover:opacity-50"
-                        src={playlist.image}
-                        alt={`${playlist.name} cover`}
-                        style={{
-                          height: "120px", // Adjusted height for better mobile fit
-                          width: "120px",
-                          objectFit: "cover",
-                        }}
-                      />
-                      <MDBCardBody className="text-center mt-2">
-                        <Link
-                          to={`/playlist/${playlist.name}`}
-                          className="text-md font-semibold text-white hover:text-gray-400"
-                        >
-                          {playlist.name}
-                        </Link>
-                      </MDBCardBody>
+                      {/* Wrap both image and name in a single Link */}
+                      <Link to={`/playlist/${playlist.name}`} className="text-center">
+                        <MDBCardImage
+                          component="img"
+                          className="rounded-full opacity-90 transition-opacity duration-300 hover:opacity-50"
+                          src={playlist.image}
+                          alt={`${playlist.name} cover`}
+                          style={{
+                            height: "120px", // Adjusted height for better mobile fit
+                            width: "120px",
+                            objectFit: "cover",
+                          }}
+                        />
+                        <MDBCardBody className="mt-2">
+                          <span className="text-md font-semibold text-white hover:text-gray-400">
+                            {playlist.name}
+                          </span>
+                        </MDBCardBody>
+                      </Link>
                     </MDBCard>
                   </SwiperSlide>
                 ))}
