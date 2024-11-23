@@ -15,11 +15,10 @@ dotenv.config();
 const app = express();
 
 // Configure CORS to allow requests from any origin
-
 app.use(cors({
-    origin:"*",
-    credentials:true
-})); // Apply CORS
+    origin: "https://mashups-dbea.vercel.app",
+    credentials: true
+}));
 app.use(bodyParser.json());
 
 // Initialize database connection
