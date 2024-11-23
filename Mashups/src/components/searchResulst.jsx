@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PlaylistSongs from './playlistSongs';
-import { setSongs, setCurrentSongIndex, togglePlayPause } from '../features/audioSlice';
+import { setSongs, setCurrentSongIndex, togglePlayPause, setCurrentSongId } from '../features/audioSlice';
 import { Swiper, SwiperSlide } from "swiper/react";
 import { MDBCard, MDBCardBody, MDBCardImage } from "mdb-react-ui-kit";
 import "swiper/css";
@@ -17,6 +17,7 @@ const SearchResults = () => {
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
   const dispatch = useDispatch();
 
+  const currentSongId = useSelector ((state) => state.audio.currentSongId);
   const currentSongIndex = useSelector((state) => state.audio.currentSongIndex);
   const isPlaying = useSelector((state) => state.audio.isPlaying);
 
@@ -25,6 +26,18 @@ const SearchResults = () => {
       dispatch(setSongs(songs));
     }
   }, [songs, dispatch]);
+
+  useEffect(() => {
+    // Fetch search results and update the songs list
+    dispatch(setSongs(songs));
+    
+    // Keep the current song if it's still playing
+    if (currentSongId) {
+      dispatch(setCurrentSongId(currentSongId));
+      dispatch(setCurrentSongIndex(currentSongIndex));
+    }
+  }, [songs, dispatch, currentSongId, currentSongIndex]); // Ensure current song state persists
+  
 
   useEffect(() => {
     const lowerTerm = term.toLowerCase();
@@ -39,12 +52,13 @@ const SearchResults = () => {
     return <p>Error: {error}</p>;
   }
 
-  const handleSongClick = (index) => {
-    dispatch(setCurrentSongIndex(index));
-    if (isPlaying) {
-      dispatch(togglePlayPause(true));
+  const handleSongClick = (index, _id) => {
+    dispatch(setCurrentSongId(_id)); // Updates both index and ID in audioSlice
+    if (!isPlaying) {
+      dispatch(togglePlayPause(true)); // Starts playback if not already playing
     }
   };
+  
 
   const handlePlaylistClick = () => {
     dispatch(togglePage(false));
@@ -70,7 +84,7 @@ const SearchResults = () => {
                 <li
                   key={song._id}
                   className="bg-black flex shadow-md rounded-lg p-4 hover:bg-gray-700 transition duration-300 cursor-pointer"
-                  onClick={() => handleSongClick(index)}
+                  onClick={() => handleSongClick(index,song._id)}
                 >
                   <p className={`flex-1 text-lg font-semibold mb-2 ${currentSongIndex === index ? 'text-gray-500' : 'text-white'}`}>
                     {index + 1}. {song.name}

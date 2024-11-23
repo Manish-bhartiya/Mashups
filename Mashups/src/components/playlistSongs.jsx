@@ -1,22 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setSongs, setCurrentSongIndex, togglePlayPause } from "../features/audioSlice";
+import {
+  setSongs,
+  setCurrentSongIndex,
+  togglePlayPause,
+  setCurrentSongId,
+} from "../features/audioSlice";
 import { apiconnecter } from "../services/apiconnecter";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import axios from "axios";
 import toast from "react-hot-toast";
+
+// Utility function to get user from localStorage
+const getUserFromLocalStorage = () => {
+  const user = JSON.parse(localStorage.getItem("Users"));
+  if (!user) {
+    toast.error("User not found. Please log in again.");
+    throw new Error("User not logged in");
+  }
+  return user;
+};
 
 const PlaylistSongs = ({ playlistName }) => {
   const currentSongIndex = useSelector((state) => state.audio.currentSongIndex);
   const isPlaying = useSelector((state) => state.audio.isPlaying);
+  const currentSongId = useSelector((state) => state.audio.currentSongId);
 
   const [playlist, setPlaylist] = useState(null);
   const [playlistsongs, setPlaylistsongs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [songid, setSongid] = useState(null);
   const [favoriteSongs, setFavoriteSongs] = useState([]);
 
   const navigate = useNavigate();
@@ -25,18 +39,16 @@ const PlaylistSongs = ({ playlistName }) => {
   useEffect(() => {
     const fetchFavoriteSongs = async () => {
       try {
-        const user = JSON.parse(localStorage.getItem("Users"));
-        if (!user) {
-          toast.error("User not found. Please log in again.");
-          return;
-        }
-    
-        const response = await apiconnecter('get', `users/getFavorites?userId=${user._id}`);
-    
-        if (response && response.data && response.data.favoriteSongs) {
+        const user = getUserFromLocalStorage();
+        const response = await apiconnecter(
+          "get",
+          `users/getFavorites?userId=${user._id}`
+        );
+
+        if (response?.data?.favoriteSongs) {
           setFavoriteSongs(response.data.favoriteSongs);
         } else {
-          throw new Error('Invalid response format');
+          throw new Error("Invalid response format");
         }
       } catch (err) {
         setError("Failed to fetch favorite songs.");
@@ -45,21 +57,28 @@ const PlaylistSongs = ({ playlistName }) => {
         setLoading(false);
       }
     };
-    
+
     fetchFavoriteSongs();
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
+    // Fetch the playlist and songs as usual
     const fetchPlaylistAndSongs = async () => {
       try {
         const response = await apiconnecter("get", `playlists/${playlistName}`);
-
-        // const response = await axios.get(`http://localhost:4001/api/play/${playlistName}`);
         const { playlist: playlistData, songs: songsData } = response.data;
-
+        
         setPlaylist(playlistData);
         setPlaylistsongs(songsData);
+        
+        // Dispatch songs to Redux
         dispatch(setSongs(songsData));
+        
+        // Keep playing the current song if it's already selected
+        if (currentSongId) {
+          dispatch(setCurrentSongId(currentSongId));
+          dispatch(setCurrentSongIndex(currentSongIndex));
+        }
       } catch (error) {
         setError("Error fetching playlist and songs.");
         console.error("Error fetching playlist and songs:", error);
@@ -67,78 +86,54 @@ const PlaylistSongs = ({ playlistName }) => {
         setLoading(false);
       }
     };
-
+  
     if (playlistName) {
       fetchPlaylistAndSongs();
     }
-  }, [playlistName, dispatch]);
+  }, [playlistName, dispatch, currentSongId, currentSongIndex]);
+
+  // Memoized isFavorite function for optimization
+  const isFavorite = useMemo(
+    () => (_id) => favoriteSongs.some((fav) => fav._id === _id),
+    [favoriteSongs]
+  );
 
   const handleSongClick = (index, _id) => {
-    setSongid(_id);
-    dispatch(setCurrentSongIndex(index));
-    if (isPlaying) dispatch(togglePlayPause(true));
+    // If the song clicked is the same as the current song, don't stop or reset
+    if (_id === currentSongId) {
+      return; // Don't do anything if the same song is clicked again
+    }
+  
+    dispatch(setCurrentSongId(_id)); // Set new song ID
+    dispatch(setCurrentSongIndex(index)); // Set the song index
+    if (!isPlaying) dispatch(togglePlayPause(true)); // Play the song if it's not already playing
   };
-
-  const isFavorite = (songId) => {
-    return favoriteSongs.some((favSong) => favSong._id === songId);
-  };
+  
 
   const toggleFavorite = async (_id) => {
-    const user = JSON.parse(localStorage.getItem("Users"));
-    if (!user) {
-      toast.error("User not found. Please log in again.");
-      return;
-    }
+    try {
+      const user = getUserFromLocalStorage();
 
-    if (isFavorite(_id)) {
-      try {
-        
-        // await axios.delete(`http://localhost:4001/api/users/removeFavorite`, {
-        //   data: { songId: _id, userId: user._id },
-        // });
-        // await apiconnecter('delete', 'users/removeFavorite', {
-        //   headers: {
-        //     'Content-Type': 'application/json',
-        //   },
-        //   bodydata: { songId: _id, userId: user._id },  // Use 'data' inside the config object for axios DELETE requests
-        // });
-        await apiconnecter('delete', 'users/removeFavorite', {
-          songId: _id, userId: user._id
+      if (isFavorite(_id)) {
+        await apiconnecter("delete", "users/removeFavorite", {
+          songId: _id,
+          userId: user._id,
         });
-
         setFavoriteSongs((prev) =>
           prev.filter((favSong) => favSong._id !== _id)
         );
         toast.success("Song removed from favorites.");
-      } catch (error) {
-        console.error("Failed to remove from favorites:", error);
-        toast.error("Failed to remove from favorites.");
-      }
-    } else {
-      try {
-        // const formData = { songId: _id, userId: user._id };
-
-        // await axios.post(`http://localhost:4001/api/addFavorite`, formData, {
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        // });
-
-        const formData = { songId: _id, userId: user._id };
-
-        await apiconnecter("post", "users/addFavorite", formData, {
-          headers: {
-            "Content-Type": "application/json",
-          },
+      } else {
+        await apiconnecter("post", "users/addFavorite", {
+          songId: _id,
+          userId: user._id,
         });
-
-
         setFavoriteSongs((prev) => [...prev, { _id }]);
         toast.success("Song added to favorites.");
-      } catch (error) {
-        console.error("Failed to add to favorites:", error);
-        toast.error("Failed to add to favorites.");
       }
+    } catch (error) {
+      console.error("Error toggling favorite status:", error);
+      toast.error("Failed to update favorite status.");
     }
   };
 
@@ -179,25 +174,27 @@ const PlaylistSongs = ({ playlistName }) => {
           {playlistsongs.map((song, index) => (
             <li
               key={song._id}
-              className={`flex items-center justify-between p-4  hover:bg-gray-700 transition duration-300 cursor-pointer ${
-                songid === song._id ? "bg-gray-800" : "bg-black"
+              className={`flex items-center justify-between p-4 hover:bg-gray-700 transition duration-300 cursor-pointer ${
+                currentSongId === song._id ? "bg-gray-800" : "bg-black"
               }`}
               onClick={() => handleSongClick(index, song._id)}
             >
               <p
                 className={`flex-1 text-sm md:text-lg font-semibold mb-2 ${
-                  songid === song._id ? "text-gray-500" : "text-white"
+                  currentSongId === song._id
+                    ? "text-gray-500"
+                    : "text-white"
                 }`}
               >
                 {index + 1}. {song.name}
               </p>
-              
+
               <p className="flex-1 text-right pr-4 text-sm md:text-lg text-white">
                 {song.artist}
               </p>
               {isFavorite(song._id) ? (
                 <FaHeart
-                  className=" cursor-pointer"
+                  className="cursor-pointer"
                   onClick={() => toggleFavorite(song._id)}
                 />
               ) : (

@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { FaPause, FaPlay, FaStepBackward, FaStepForward } from 'react-icons/fa';
 import { IoIosVolumeHigh } from 'react-icons/io';
 import { useDispatch, useSelector } from 'react-redux';
-import { stopAudio, togglePlayPause, prevSong, nextSong } from '../features/audioSlice';
+import { stopAudio, togglePlayPause, prevSong, nextSong, setCurrentSongId  } from '../features/audioSlice';
 
 const AudioPlayer = () => {
   const dispatch = useDispatch();
@@ -46,9 +46,15 @@ const AudioPlayer = () => {
         audio.removeEventListener('ended', handleEnded);
       };
     }
-  }, [currentSongIndex, songs]);
+  }, [setCurrentSongId, songs]);
 
   useEffect(() => {
+    if(audioRef.current && setCurrentSongId != null && songs[setCurrentSongId]){
+      audioRef.current.src = songs[setCurrentSongId].url;
+      dispatch(togglePlayPause(true)).catch(error => {
+        console.error('Error playing audio:', error);
+      });
+    }
     if (audioRef.current && currentSongIndex !== null && songs[currentSongIndex]) {
       audioRef.current.src = songs[currentSongIndex].url;
       audioRef.current.play().then(() => {
@@ -57,7 +63,7 @@ const AudioPlayer = () => {
         console.error('Error playing audio:', error);
       });
     }
-  }, [currentSongIndex, dispatch, songs]);
+  }, [currentSongIndex,setCurrentSongId, dispatch, songs]);
 
   const formatTime = (time) => {
     if (time && !isNaN(time)) {
