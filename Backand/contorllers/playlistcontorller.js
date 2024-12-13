@@ -40,7 +40,7 @@ const createPlaylist = async (req, res) => {
     }
   };
 
-// Function to add songs to an existing playlist by name
+// Function to add songs to an existing playlist bsy name
 const addSongsToPlaylist = async (req, res) => {
   try {
     const { playlistName, songs } = req.body;
