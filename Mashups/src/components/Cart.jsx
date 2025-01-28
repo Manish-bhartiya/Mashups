@@ -30,7 +30,7 @@ function Cart() {
               slidesPerView={2} // Adjust for mobile
               breakpoints={{
                 640: { slidesPerView: 3 }, // For larger screens
-                768: { slidesPerView: 4 },
+                768: { slidesPerView: 3 },
                 1024: { slidesPerView: 5 },
               }}
               onSlideChange={() => console.log("slide change")}
@@ -39,19 +39,19 @@ function Cart() {
               {Array.isArray(playlists) &&
                 playlists.map((playlist) => (
                   <SwiperSlide key={playlist._id}>
-                    <MDBCard className="bg-black flex flex-col justify-center items-center hover:shadow-2xl p-2">
+                    <MDBCard className="bg-black  flex flex-col justify-center items-center hover:shadow-2xl p-2">
                       {/* Wrap both image and name in a single Link */}
                       <Link to={`/playlist/${playlist.name}`} className="text-center">
                         <MDBCardImage
                           component="img"
-                          className="rounded-full opacity-90 transition-opacity duration-300 hover:opacity-50"
+                          className="rounded-full sm:size-72 lg:size-40  opacity-90 transition-opacity duration-300 hover:opacity-50"
                           src={playlist.image}
                           alt={`${playlist.name} cover`}
-                          style={{
-                            height: "120px", // Adjusted height for better mobile fit
-                            width: "120px",
-                            objectFit: "cover",
-                          }}
+                          // style={{
+                          //   height: "120px", // Adjusted height for better mobile fit
+                          //   width: "120px",
+                          //   objectFit: "cover",
+                          // }}
                         />
                         <MDBCardBody className="mt-2">
                           <span className="text-md font-semibold text-white hover:text-gray-400">

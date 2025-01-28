@@ -76,8 +76,8 @@ const AlbumSongs = ({ AlbumName }) => {
   }, [AlbumName, dispatch]);
 
   const handleSongClick = (index, _id) => {
-    setSongid(_id);
-    dispatch(setCurrentSongIndex(index));
+    dispatch(setSongid(_id));
+    // dispatch(setCurrentSongIndex(index));
     if (isPlaying) dispatch(togglePlayPause(true));
   };
 

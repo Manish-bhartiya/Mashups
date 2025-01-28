@@ -1,22 +1,26 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'), // Adjust the path according to your project structure
+    }
+  },
   server: {
-    port: '5173',
+    port: 5173,
     strictPort: true,
     headers: {
-      // Example of setting CORS headers or other custom headers
       'access-control-allow-origin': '*',
       'a': 'b' // Remove this if it's not needed
     },
     proxy: {
       '/api': {
-        // target: 'http://localhost:4001', // Use this during local development if needed
-        target: 'https://mashupsbackand.vercel.app/',
+        target: 'https://mashupsbackand.vercel.app/', // Your API target
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '') // Removes /api prefix from the request
+        rewrite: (path) => path.replace(/^\/api/, '') // Removes /api prefix
       }
     }
   },

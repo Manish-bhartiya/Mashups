@@ -18,16 +18,12 @@ const cloudinaryUploader = async (filePath) => {
     });
 
     // Safely delete the local file after successful upload
-    try {
-      fs.unlinkSync(filePath);
-    } catch (deleteError) {
-      console.error('Error deleting temporary file:', deleteError.message);
-    }
+    fs.unlinkSync(filePath);
 
     return { success: true, result };
   } catch (error) {
-    console.error('Cloudinary upload error:', error.stack || error.message);
-    return { success: false, error: error.message || error };
+    console.error('Cloudinary upload error:', error.message);
+    return { success: false, error: error.message };
   }
 };
 

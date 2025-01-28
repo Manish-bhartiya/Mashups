@@ -105,7 +105,7 @@ const PlaylistSongs = ({ playlistName }) => {
     }
   
     dispatch(setCurrentSongId(_id)); // Set new song ID
-    dispatch(setCurrentSongIndex(index)); // Set the song index
+    // dispatch(setCurrentSongIndex(index)); // Set the song index
     if (!isPlaying) dispatch(togglePlayPause(true)); // Play the song if it's not already playing
   };
   
@@ -162,9 +162,9 @@ const PlaylistSongs = ({ playlistName }) => {
               <img
                 src={playlist.image}
                 alt={playlist.name}
-                className="w-40 h-40 md:w-60 md:h-60 lg:w-80 lg:h-80 mx-auto shadow-lg mb-4 object-cover rounded-full"
+                className="w-40 h-40 sm:size-80 mx-auto shadow-lg mb-4 object-cover rounded-full"
               />
-              <h2 className="text-2xl md:text-3xl font-bold">{playlist.name}</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold">{playlist.name}</h2>
             </>
           )}
         </div>
@@ -180,7 +180,7 @@ const PlaylistSongs = ({ playlistName }) => {
               onClick={() => handleSongClick(index, song._id)}
             >
               <p
-                className={`flex-1 text-sm md:text-lg font-semibold mb-2 ${
+                className={`flex-1  sm:text-3xl lg:text-lg font-semibold mb-2 ${
                   currentSongId === song._id
                     ? "text-gray-500"
                     : "text-white"
@@ -189,7 +189,7 @@ const PlaylistSongs = ({ playlistName }) => {
                 {index + 1}. {song.name}
               </p>
 
-              <p className="flex-1 text-right pr-4 text-sm md:text-lg text-white">
+              <p className="flex-1 text-right pr-4 sm:text-3xl lg:text-lg text-white">
                 {song.artist}
               </p>
               {isFavorite(song._id) ? (
@@ -199,7 +199,7 @@ const PlaylistSongs = ({ playlistName }) => {
                 />
               ) : (
                 <FaRegHeart
-                  className="cursor-pointer"
+                  className="cursor-pointer sm:size-5"
                   onClick={() => toggleFavorite(song._id)}
                 />
               )}

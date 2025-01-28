@@ -1,3 +1,4 @@
+// src/features/audioSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -5,6 +6,9 @@ const initialState = {
   currentSongIndex: null,
   isPlaying: false,
   currentSongId: null,
+  currentTime: 0, // Added to track current time
+  duration: 0, // Added to track song duration
+  volume: 1, // Added to track volume
 };
 
 const audioSlice = createSlice({
@@ -21,6 +25,7 @@ const audioSlice = createSlice({
       state.isPlaying = false;
       state.currentSongIndex = null;
       state.currentSongId = null;
+      state.currentTime = 0;
     },
     setCurrentSongIndex: (state, action) => {
       state.currentSongIndex = action.payload;
@@ -45,6 +50,15 @@ const audioSlice = createSlice({
         state.currentSongId = state.songs[state.currentSongIndex]._id;
       }
     },
+    setCurrentTime: (state, action) => {
+      state.currentTime = action.payload;
+    },
+    setDuration: (state, action) => {
+      state.duration = action.payload;
+    },
+    setVolume: (state, action) => {
+      state.volume = action.payload;
+    },
   },
 });
 
@@ -56,6 +70,9 @@ export const {
   setCurrentSongId,
   prevSong,
   nextSong,
+  setCurrentTime,
+  setDuration,
+  setVolume,
 } = audioSlice.actions;
 
 export default audioSlice.reducer;

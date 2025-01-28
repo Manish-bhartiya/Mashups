@@ -5,7 +5,7 @@ import { apiconnecter } from "../services/apiconnecter";
 export const fetchResults = createAsyncThunk('search/fetchSearchResults', async (term) => {
     try {
         console.log(term);
-        // const response = await axios.get(`http://localhost:4001/api/searchsongs?term=${term}`);
+        // const response = await axios.get(` https://love-lyrics-backend.vercel.app/api/v1/tracks/getAllTrack`);
         const response = await apiconnecter('get',`search/searchsongs?term=${term}`);
 
         console.log(response.data);  // Check what the API is returning
