@@ -15,7 +15,7 @@ const Home = () => {
       {/* <div style={{ backgroundColor: "#121212", minHeight: "100vh" }}>
       <NewReleasesSlider />
     </div> */}
-       
+       <NewReleasesSlider/>
         <Album />
         <Cart />
       </div>

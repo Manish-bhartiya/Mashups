@@ -6,6 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/bundle";
 import { MDBCard, MDBCardBody, MDBCardImage } from "mdb-react-ui-kit";
+import AlbumRootSkeleton from "../components/AlbumRootSkeleton"; // Importing Skeleton component
 
 function Album() {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ function Album() {
           <div>
             <h1 className="text-white text-2xl mb-4">Top Albums</h1>
             {albumStatus === "loading" ? (
-              <div className="text-white text-center">Loading...</div>
+              <AlbumRootSkeleton /> // Show skeleton loader while loading
             ) : (
               <Swiper
                 spaceBetween={10}
@@ -56,7 +57,6 @@ function Album() {
                             className="rounded-md sm:size-72 lg:size-40 opacity-90 transition-opacity duration-300 hover:opacity-50"
                             src={album.image}
                             alt={`${album.name} cover`}
-                            // style={{ height: "150px", width: "150px", objectFit: "cover" }}
                           />
                           <MDBCardBody className="mt-2">
                             <span className="text-sm md:text-lg font-semibold text-white hover:text-gray-400">

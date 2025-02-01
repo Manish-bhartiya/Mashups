@@ -5,6 +5,7 @@ import audioReducer from '../features/audioSlice';
 import albumReducer from '../features/albums';
 import authReducer from '../features/authSlice';
 import searchReducer from '../features/searchSlice';
+import  userReducer  from '../features/userSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     audio: audioReducer,
     album:albumReducer,
     auth: authReducer,      
-    search: searchReducer,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+    search: searchReducer,      
+    User: userReducer,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
   },
 });

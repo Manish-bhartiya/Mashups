@@ -1,151 +1,139 @@
 import React, { useEffect, useState } from "react";
-import Slider from "react-slick";
-import styled from "styled-components";
-import axios from "axios";
-// Import Slick Carousel styles
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-
-// Styled components
-const SliderContainer = styled.div`
-  padding: 20px;
-  background: #121212;
-`;
-
-const Slide = styled.div`
-    display: flex;
-  flex-direction: column;  /* Arrange items vertically */
-  align-items: center; 
-  
-`;
-
-const SongCard = styled.div`
-  width: 30%;
-  background-color: #1a1a1a;
-  border-radius: 10px;
-  padding: 10px;
-  margin-bottom: 20px;
-  text-align: center;
-  color: #fff;
-
-  img {
-    max-width: 100%;
-    border-radius: 10px;
-    height: 150px;
-    object-fit: cover;
-  }
-
-  h3 {
-    margin-top: 10px;
-    font-size: 1rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  p {
-    font-size: 0.9rem;
-    color: #b3b3b3;
-  }
-`;
+import { useSelector } from "react-redux";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/bundle";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import AlbumRootSkeleton from "../components/AlbumRootSkeleton";
+import ReleaseCard from "../components/ReleaseCard";
+import { apiconnecter } from "../services/apiconnecter";
 
 const NewReleasesSlider = () => {
-  const [songs, setSongs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const query = useSelector((state) => state.User.query);
+  const search = useSelector((state) => state.User.search);
+  const [loader, setLoader] = useState(true); // Set to true initially to show loader
+  const [card, setCard] = useState(0);
+  const [tracks, setTracks] = useState([]);
+  const [chunks, setChunks] = useState([]);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  // Fetch songs from API
-  useEffect(() => {
-    const fetchSongs = async () => {
-      try {
-        const response = await axios.get("http://localhost:4001/api/songs/songs");
-        console.log(response.data);
-        if (response.data && response.data.songs) {
-          setSongs(response.data.songs);
-          setLoading(false);
-        } else {
-          throw new Error("Invalid response structure");
-        }
-      } catch (error) {
-        console.error("Error fetching songs:", error);
-        setError(true);
-        setLoading(false);
-      }
-    };
+  const formdata = new FormData();
+  formdata.append("Name", query);
 
-    fetchSongs();
-  }, []);
-
-  // Slider settings
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1, // One slide per scroll
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-    ],
+  // Shuffle the tracks randomly
+  const shuffleTracks = (trackList) => {
+    for (let i = trackList.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [trackList[i], trackList[j]] = [trackList[j], trackList[i]];
+    }
+    return trackList;
   };
 
-  // Render loading state
-  if (loading) {
-    return (
-      <SliderContainer>
-        <h2 style={{ color: "#fff" }}>Loading New Releases...</h2>
-      </SliderContainer>
-    );
+  // Chunk tracks into groups of 3
+  const chunkTracks = (trackList) => {
+    const chunked = [];
+    for (let i = 0; i < trackList.length; i += 3) {
+      chunked.push(trackList.slice(i, i + 3));
+    }
+    return chunked;
+  };
+
+  // Fetch songs from API
+  async function searchQuery() {
+    try {
+      setLoader(true); // Show loader while fetching data
+      const response = await apiconnecter("get", "songs/songs");
+      const data = response.data; // Axios response structure
+      console.log("data is here", data);
+
+      if (!data || !data.songs) {
+        console.error("Error: API response does not contain 'songs'");
+        setLoader(false); // Hide loader even if there is no data
+        return;
+      }
+
+      const shuffledTracks = shuffleTracks(data.songs);
+      setTracks(shuffledTracks); // Update tracks with shuffled data
+      setChunks(chunkTracks(shuffledTracks)); // Update chunks based on shuffled tracks
+      setLoader(false); // Hide loader after data is fetched
+    } catch (error) {
+      console.error("Error fetching tracks:", error);
+      setLoader(false); // Hide loader in case of error
+    }
   }
 
-  // Render error state
-  if (error) {
-    return (
-      <SliderContainer>
-        <h2 style={{ color: "red" }}>Failed to load songs. Please try again later.</h2>
-      </SliderContainer>
-    );
-  }
+  // Update card view based on window size
+  const updateWindowWidth = () => {
+    setWindowWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    if (windowWidth < 300) {
+      setCard(1);
+    } else if (windowWidth < 500) {
+      setCard(2);
+    } else if (windowWidth < 800) {
+      setCard(3);
+    } else if (windowWidth < 1000) {
+      setCard(4);
+    } else if (windowWidth < 1200) {
+      setCard(5);
+    } else {
+      setCard(5);
+    }
+  }, [windowWidth]);
+
+  useEffect(() => {
+    searchQuery();
+    window.addEventListener("resize", updateWindowWidth);
+
+    return () => {
+      window.removeEventListener("resize", updateWindowWidth);
+    };
+  }, [search]);
 
   return (
-    <SliderContainer>
-      <h2 style={{ color: "#fff", marginBottom: "20px" }}>New Releases</h2>
-      <Slider {...settings}>
-        {/* Grouping songs in rows */}
-        {songs.map((song, index) => {
-          if (index % 6 === 0) {
-            return (
-              <Slide key={song._id}>
-                {songs.slice(index, index + 6).map((song) => (
-                  <SongCard key={song._id}>
-                    <img src={song.image} alt={song.name || "Song Cover"} />
-                    <h3>{song.name}</h3>
-                    <p>{song.artist}</p>
-                  </SongCard>
+    <>
+      {loader ? (
+        <div className="flex flex-col">
+          <div className="opacity-40 m-3 gap-2 flex flex-col">
+            <Skeleton height={20} width={180} baseColor="gray" />
+            <Skeleton height={140} width={180} baseColor="gray" />
+          </div>
+          <AlbumRootSkeleton/>
+        </div>
+      ) : (
+        <div className="mb-[10px]">
+          <div className="flex items-start ml-3 flex-col text-white"></div>
+          <div className="flex flex-col gap-2">
+            <h1 className="text-gray-300 mt-2 ml-2 text-xl font-bold">
+              {tracks.length > 0 && "Songs"}
+            </h1>
+            {chunks.length > 0 ? (
+              <Swiper
+                slidesPerView={card}
+                spaceBetween={1}
+                loop={true}
+                freeMode={true}
+                autoplay={{
+                  delay: 2500,
+                }}
+                className="w-full"
+              >
+                {chunks.map((chunk, index) => (
+                  <SwiperSlide key={index}>
+                    <ReleaseCard song={chunk} />
+                  </SwiperSlide>
                 ))}
-              </Slide>
-            );
-          }
-          return null;
-        })}
-      </Slider>
-    </SliderContainer>
+              </Swiper>
+            ) : (
+              <div>No songs available</div>
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
